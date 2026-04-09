@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Colloqui con i genitori</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F7F4EE;
+    --card: #FFFEFB;
+    --ink: #1C1A17;
+    --ink2: #6B6560;
+    --ink3: #A09A93;
+    --accent: #2D5016;
+    --accent-light: #EAF0E2;
+    --border: #E2DDD6;
+    --danger: #8B2E2E;
+    --danger-light: #F5EAEA;
+    --warn: #7A5200;
+    --warn-light: #FFF8E6;
+    --warn-border: #F0D890;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 2rem 1rem 4rem;
+  }
+  .container { max-width: 520px; margin: 0 auto; }
+  header { margin-bottom: 2rem; }
+  .eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 32px; line-height: 1.2; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .header-line { width: 40px; height: 2px; background: var(--accent); margin-top: 14px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1rem; }
+  .field { margin-bottom: 1rem; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--ink2); margin-bottom: 6px; }
+  input[type=text], select {
+    width: 100%; height: 46px; padding: 0 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    outline: none; transition: border-color 0.15s;
+    appearance: none; -webkit-appearance: none;
+  }
+  input[type=text]:focus, select:focus { border-color: var(--accent); }
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: ''; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 5px solid var(--ink3); pointer-events: none;
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+
+  .modify-banner {
+    display: none; background: var(--warn-light); border: 1px solid var(--warn-border);
+    border-radius: 10px; padding: 12px 16px; font-size: 14px;
+    color: var(--warn); line-height: 1.5; margin-bottom: 1.25rem;
+  }
+  .modify-banner.show { display: block; }
+  .modify-banner strong { font-weight: 500; }
+
+  .slots-intro { font-size: 13px; color: var(--ink2); margin-bottom: 1rem; line-height: 1.5; }
+  .slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .slot-btn {
+    height: 48px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .slot-btn:active:not(:disabled) { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+  .slot-btn.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .slot-btn.current-slot { border: 2px solid var(--accent); color: var(--accent); background: var(--accent-light); }
+  .slot-btn:disabled { background: #EDEBE6; border-color: #E2DDD6; color: #C0B9B0; cursor: not-allowed; text-decoration: line-through; opacity: 0.7; }
+  .slots-loading { text-align: center; padding: 1.5rem; color: var(--ink3); font-size: 14px; }
+  .free-count { font-size: 12px; color: var(--ink3); margin-top: 10px; }
+  .slot-legend { display: flex; gap: 16px; margin-top: 12px; font-size: 12px; color: var(--ink3); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  .submit-btn {
+    width: 100%; height: 54px; background: var(--accent); color: #fff;
+    border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 500; cursor: pointer;
+    margin-top: 0.5rem; letter-spacing: 0.02em;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .msg { border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.5; margin-bottom: 1rem; display: none; }
+  .msg.show { display: block; }
+  .msg-error { background: var(--danger-light); color: var(--danger); border: 1px solid #E8C5C5; }
+
+  .success-screen { text-align: center; padding: 2rem 1rem; display: none; }
+  .success-screen.show { display: block; }
+  .success-icon { width: 56px; height: 56px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+  .success-icon svg { width: 28px; height: 28px; }
+  .success-screen h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 24px; margin-bottom: 8px; }
+  .success-screen p { color: var(--ink2); font-size: 14px; line-height: 1.6; }
+  .booking-summary { margin-top: 1.25rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; text-align: left; }
+  .summary-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row span:first-child { color: var(--ink2); }
+  .summary-row span:last-child { font-weight: 500; }
+  .new-booking-btn { margin-top: 1.25rem; padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--ink2); font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+
+  @media (max-width: 600px) {
+    body { padding: 1.25rem 0.875rem 4rem; }
+    h1 { font-size: 24px; }
+    .card { padding: 1.25rem 1rem; }
+    .row2 { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+    .row2 .field { margin-bottom: 1rem; }
+    .slots-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .slot-btn { height: 46px; font-size: 13px; }
+  }
+  @media (max-width: 380px) {
+    .slots-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .slot-btn { height: 44px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Scuola Primaria · a.s. 2025/26</div>
+    <h1>Colloqui<br><em>con i genitori del 14/04/26</em></h1>
+    <div class="header-line"></div>
+  </header>
+
+  <div id="mainForm">
+    <div id="msgError" class="msg msg-error"></div>
+    <div id="modifyBanner" class="modify-banner"></div>
+
+    <div class="card">
+      <div class="section-label">Dati alunno</div>
+      <div class="row2">
+        <div class="field">
+          <label for="cognome">Cognome Alunno</label>
+          <input type="text" id="cognome" placeholder="Rossi" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="nome">Nome Alunno</label>
+          <input type="text" id="nome" placeholder="Luca" autocomplete="off" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="classe">Classe</label>
+        <div class="select-wrap">
+          <select id="classe">
+            <option value="">— Seleziona la classe —</option>
+            <option value="2A">2A</option>
+            <option value="2B">2B</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Scegli l'orario</div>
+      <p class="slots-intro">Seleziona un orario disponibile. Ogni colloquio dura circa 6 minuti. Gli orari barrati sono già occupati.</p>
+      <div id="slotsContainer" class="slots-loading">Inserisci il cognome per caricare gli orari…</div>
+      <div class="free-count" id="freeCount"></div>
+      <div class="slot-legend" id="slotLegend" style="display:none">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><span>Selezionato</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-light);border:2px solid var(--accent)"></div><span>Tuo orario attuale</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#EDEBE6"></div><span>Occupato</span></div>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" disabled onclick="submitForm()">Conferma prenotazione</button>
+  </div>
+
+  <div id="successScreen" class="success-screen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h2 id="successTitle">Prenotazione confermata</h2>
+    <p id="successSub">Il tuo orario è stato registrato con successo.</p>
+    <div class="booking-summary" id="bookingSummary"></div>
+    <button class="new-booking-btn" onclick="resetForm()">Registra un altro alunno</button>
+  </div>
+</div>
+
+<script>
+  // ⚠️ Sostituisci con l'URL della tua Web App Apps Script
+  var API_URL = 'INSERISCI_QUI_URL_APPS_SCRIPT';
+
+  var selectedSlot = null;
+  var currentSlot = null;
+  var isModify = false;
+  var slotsLoaded = false;
+  var debounceTimer = null;
+
+  document.getElementById('cognome').addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    selectedSlot = null; currentSlot = null; isModify = false; slotsLoaded = false;
+    document.getElementById('slotsContainer').innerHTML = '<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Caricamento…</div>';
+    document.getElementById('freeCount').textContent = '';
+    document.getElementById('modifyBanner').classList.remove('show');
+    document.getElementById('slotLegend').style.display = 'none';
+    updateSubmit();
+    var val = this.value.trim();
+    if (val.length >= 2) {
+      debounceTimer = setTimeout(function() { loadSlots(val); }, 500);
+    } else {
+      document.getElementById('slotsContainer').innerHTML = '<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';
+    }
+  });
+
+  ['nome','classe'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', updateSubmit);
+    document.getElementById(id).addEventListener('change', updateSubmit);
+  });
+
+  function loadSlots(cognome) {
+    fetch(API_URL + '?action=slots&cognome=' + encodeURIComponent(cognome))
+      .then(function(r) { return r.json(); })
+      .then(onSlotsLoaded)
+      .catch(function() { showError('Errore di connessione. Ricarica la pagina.'); });
+  }
+
+  function onSlotsLoaded(data) {
+    slotsLoaded = true;
+    var existing = data.existing;
+    if (existing) {
+      isModify = true; currentSlot = existing.orario;
+      document.getElementById('nome').value = existing.nome;
+      document.getElementById('classe').value = existing.classe;
+      var banner = document.getElementById('modifyBanner');
+      banner.innerHTML = '⚠️ <strong>' + existing.cognome + ' ' + existing.nome + '</strong> è già registrato alle <strong>' + existing.orario + '</strong>.<br>Seleziona un nuovo orario per modificare la prenotazione.';
+      banner.classList.add('show');
+      document.getElementById('slotLegend').style.display = 'flex';
+    } else {
+      isModify = false; currentSlot = null;
+      document.getElementById('slotLegend').style.display = 'none';
+    }
+    renderSlots(data.slots);
+  }
+
+  function renderSlots(slots) {
+    var free = slots.filter(function(s) { return !s.taken; }).length;
+    if (isModify) free--;
+    var grid = '<div class="slots-grid">';
+    slots.forEach(function(s) {
+      if (s.time === currentSlot) {
+        grid += '<button class="slot-btn current-slot" onclick="selectSlot(this,\'' + s.time + '\')">' + s.time + '</button>';
+      } else if (s.taken) {
+        grid += '<button class="slot-btn" disabled>' + s.time + '</button>';
+      } else {
+        grid += '<button class="slot-btn" onclick="selectSlot(this,\'' + s.time + '\')">' + s.time + '</button>';
+      }
+    });
+    grid += '</div>';
+    document.getElementById('slotsContainer').innerHTML = grid;
+    document.getElementById('freeCount').textContent = free + ' orari disponibili su ' + slots.length;
+  }
+
+  function selectSlot(btn, time) {
+    document.querySelectorAll('.slot-btn').forEach(function(b) { b.classList.remove('selected'); });
+    if (isModify && time === currentSlot) { selectedSlot = null; updateSubmit(); return; }
+    btn.classList.add('selected');
+    btn.classList.remove('current-slot');
+    selectedSlot = time;
+    updateSubmit();
+  }
+
+  function updateSubmit() {
+    var ok = slotsLoaded &&
+      document.getElementById('cognome').value.trim() &&
+      document.getElementById('nome').value.trim() &&
+      document.getElementById('classe').value &&
+      selectedSlot;
+    if (isModify && selectedSlot === currentSlot) ok = false;
+    document.getElementById('submitBtn').disabled = !ok;
+    document.getElementById('submitBtn').textContent = isModify ? 'Modifica prenotazione' : 'Conferma prenotazione';
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('msgError');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(function() { el.classList.remove('show'); }, 6000);
+  }
+
+  function submitForm() {
+    var btn = document.getElementById('submitBtn');
+    var cognome = document.getElementById('cognome').value.trim();
+    var nome    = document.getElementById('nome').value.trim();
+    var classe  = document.getElementById('classe').value;
+    if (!cognome || !nome || !classe || !selectedSlot) { showError('Compila tutti i campi e scegli un orario.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Invio in corso…';
+
+    var body = isModify
+      ? { action: 'modify', cognome: cognome, nuovoOrario: selectedSlot }
+      : { action: 'add', cognome: cognome, nome: nome, classe: classe, orario: selectedSlot };
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        showSuccess(cognome, nome, classe, selectedSlot, isModify);
+      } else if (res.error === 'ALREADY_EXISTS') {
+        isModify = true;
+        btn.disabled = false; btn.textContent = 'Modifica prenotazione';
+        loadSlots(cognome);
+        showError('Questo cognome è già registrato. Seleziona un nuovo orario per modificare.');
+      } else {
+        var msg = res.error || 'Si è verificato un errore. Riprova.';
+        if (msg === 'Orario già occupato. Scegline un altro.')
+          msg = 'Un\'altra famiglia ha confermato questo orario un attimo prima di te. Scegline un altro tra quelli disponibili.';
+        showError(msg);
+        btn.disabled = false;
+        btn.textContent = isModify ? 'Modifica prenotazione' : 'Conferma prenotazione';
+        selectedSlot = null;
+        loadSlots(cognome);
+        updateSubmit();
+      }
+    })
+    .catch(function() {
+      showError('Errore di connessione. Riprova.');
+      btn.disabled = false;
+      btn.textContent = isModify ? 'Modifica prenotazione' : 'Conferma prenotazione';
+    });
+  }
+
+  function showSuccess(cognome, nome, classe, orario, wasModify) {
+    document.getElementById('mainForm').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+    document.getElementById('successTitle').textContent = wasModify ? 'Prenotazione modificata' : 'Prenotazione confermata';
+    document.getElementById('successSub').textContent = wasModify ? 'Il tuo orario è stato aggiornato con successo.' : 'Il tuo orario è stato registrato con successo.';
+    document.getElementById('bookingSummary').innerHTML =
+      '<div class="summary-row"><span>Alunno</span><span>' + cognome + ' ' + nome + '</span></div>' +
+      '<div class="summary-row"><span>Classe</span><span>' + classe + '</span></div>' +
+      '<div class="summary-row"><span>Orario</span><span>' + orario + '</span></div>';
+  }
+
+  function resetForm() {
+    document.getElementById('mainForm').style.display = 'block';
+    document.getElementById('successScreen').classList.remove('show');
+    document.getElementById('cognome').value = '';
+    document.getElementById('nome').value = '';
+    document.getElementById('classe').value = '';
+    document.getElementById('modifyBanner').classList.remove('show');
+    document.getElementById('slotLegend').style.display = 'none';
+    selectedSlot = null; currentSlot = null; isModify = false; slotsLoaded = false;
+    document.getElementById('slotsContainer').innerHTML = '<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';
+    document.getElementById('freeCount').textContent = '';
+    updateSubmit();
+  }
+</script>
+</body>
+</html>
