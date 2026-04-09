@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SlotBook — Backoffice</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0F0F;--surface:#1A1A1A;--surface2:#242424;--surface3:#2E2E2E;
+  --border:#333;--border2:#444;
+  --ink:#F0EDE8;--ink2:#999;--ink3:#555;
+  --accent:#C8F75A;--accent-dark:#9DC43A;
+  --danger:#F75A5A;--danger-bg:#2A1515;
+  --success:#5AF7A0;--success-bg:#152A1E;
+  --warn:#F7C35A;--warn-bg:#2A2015;
+  --radius:10px;--radius-lg:14px;
+}
+body{background:var(--bg);color:var(--ink);font-family:'Geist',sans-serif;font-size:14px;min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-box{width:100%;max-width:380px;}
+.login-box h1{font-family:'Instrument Serif',serif;font-size:36px;font-weight:400;margin-bottom:4px;}
+.login-box h1 em{font-style:italic;color:var(--accent);}
+.login-box p{color:var(--ink2);font-size:13px;margin-bottom:2rem;}
+.login-box input{width:100%;height:46px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0 14px;color:var(--ink);font-family:'Geist',sans-serif;font-size:14px;outline:none;margin-bottom:10px;}
+.login-box input:focus{border-color:var(--accent);}
+.btn-accent{width:100%;height:46px;background:var(--accent);color:#0F0F0F;border:none;border-radius:var(--radius);font-family:'Geist',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;}
+.btn-accent:hover{opacity:.88;}
+.btn-accent:disabled{opacity:.4;cursor:not-allowed;}
+.login-err{color:var(--danger);font-size:13px;margin-top:8px;display:none;}
+
+/* APP */
+#app{display:none;min-height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;}
+.topbar-logo{font-family:'Instrument Serif',serif;font-size:20px;}
+.topbar-logo em{font-style:italic;color:var(--accent);}
+.topbar-nav{display:flex;gap:4px;}
+.nav-btn{padding:6px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink2);font-family:'Geist',sans-serif;font-size:13px;cursor:pointer;transition:background .12s,color .12s;}
+.nav-btn:hover{background:var(--surface2);color:var(--ink);}
+.nav-btn.active{background:var(--surface2);color:var(--ink);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.logout-btn{padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--ink2);font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;}
+.logout-btn:hover{background:var(--surface2);}
+
+.main{padding:2rem;max-width:960px;margin:0 auto;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* Cards & sections */
+.page-header{margin-bottom:2rem;}
+.page-header h2{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;margin-bottom:4px;}
+.page-header p{color:var(--ink2);font-size:13px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;}
+.card-title{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;}
+
+/* Form elements */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.form-row.single{grid-template-columns:1fr;}
+.field label{display:block;font-size:12px;color:var(--ink2);margin-bottom:5px;font-weight:500;}
+.field input,.field select,.field textarea{
+  width:100%;height:42px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:0 12px;color:var(--ink);font-family:'Geist',sans-serif;font-size:14px;outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.field textarea{height:80px;padding:10px 12px;resize:vertical;}
+.field select{appearance:none;-webkit-appearance:none;}
+.select-wrap{position:relative;}
+.select-wrap::after{content:'';position:absolute;right:12px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--ink3);pointer-events:none;}
+
+.classi-input{display:flex;gap:8px;align-items:center;}
+.classi-input input{flex:1;}
+.classi-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;font-size:12px;}
+.tag button{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:14px;line-height:1;padding:0;}
+.tag button:hover{color:var(--danger);}
+
+/* Buttons */
+.btn{height:38px;padding:0 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink);font-family:'Geist',sans-serif;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--surface2);}
+.btn-primary{background:var(--accent);color:#0F0F0F;border-color:transparent;font-weight:600;}
+.btn-primary:hover{opacity:.88;}
+.btn-danger{color:var(--danger);border-color:var(--danger-bg);}
+.btn-danger:hover{background:var(--danger-bg);}
+.btn-sm{height:30px;padding:0 10px;font-size:12px;}
+
+/* Table */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:8px 12px;color:var(--ink3);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--ink);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface2);}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;}
+.badge-green{background:var(--success-bg);color:var(--success);}
+.badge-yellow{background:var(--warn-bg);color:var(--warn);}
+
+/* Event list */
+.event-item{display:flex;align-items:center;justify-content:space-between;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;transition:border-color .15s;}
+.event-item:hover{border-color:var(--border2);}
+.event-info h3{font-size:15px;font-weight:500;margin-bottom:2px;}
+.event-info p{font-size:12px;color:var(--ink2);}
+.event-actions{display:flex;gap:6px;}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;}
+.stat-card .val{font-size:28px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.stat-card .lbl{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;}
+
+/* Msg */
+.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:1rem;display:none;}
+.msg.show{display:block;}
+.msg-ok{background:var(--success-bg);color:var(--success);}
+.msg-err{background:var(--danger-bg);color:var(--danger);}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.5rem;width:100%;max-width:480px;}
+.modal h3{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;margin-bottom:1rem;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem;}
+
+/* Slot preview */
+.slot-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.slot-chip{padding:4px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--ink2);}
+
+/* Link box */
+.link-box{display:flex;gap:8px;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;}
+.link-box span{flex:1;font-size:12px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace;}
+.copy-btn{flex-shrink:0;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;background:transparent;color:var(--ink);font-size:12px;cursor:pointer;}
+.copy-btn:hover{background:var(--surface3);}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(15,15,15,.3);border-top-color:#0F0F0F;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
+.spinner-light{border-color:rgba(240,237,232,.2);border-top-color:var(--ink);}
+
+@media(max-width:600px){
+  .topbar{padding:0 1rem;}
+  .main{padding:1rem;}
+  .form-row,.form-row.three{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>Slot<em>Book</em></h1>
+    <p>Gestione prenotazioni colloqui</p>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn-accent" onclick="doLogin()">Accedi</button>
+    <div class="login-err" id="loginErr">Password errata.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">Slot<em>Book</em></div>
+    <div class="topbar-nav">
+      <button class="nav-btn active" onclick="showPage('eventi')">Eventi</button>
+      <button class="nav-btn" onclick="showPage('prenotazioni')">Prenotazioni</button>
+    </div>
+    <div class="topbar-right">
+      <button class="logout-btn" onclick="doLogout()">Esci</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- EVENTI -->
+    <div class="page active" id="page-eventi">
+      <div class="page-header">
+        <h2>Eventi</h2>
+        <p>Crea e gestisci gli eventi di prenotazione colloqui</p>
+      </div>
+      <div id="msgEventi" class="msg"></div>
+      <button class="btn btn-primary" style="margin-bottom:1.5rem" onclick="openNewEventModal()">+ Nuovo evento</button>
+      <div id="eventiList"><div style="color:var(--ink3);font-size:13px">Caricamento…</div></div>
+    </div>
+
+    <!-- PRENOTAZIONI -->
+    <div class="page" id="page-prenotazioni">
+      <div class="page-header">
+        <h2>Prenotazioni</h2>
+        <p>Visualizza e gestisci tutte le prenotazioni</p>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap;">
+        <div class="select-wrap" style="min-width:200px;">
+          <select id="filterEvento" onchange="loadPrenotazioni()" style="height:38px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0 12px;color:var(--ink);font-family:'Geist',sans-serif;font-size:13px;width:100%;">
+            <option value="">— Tutti gli eventi —</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="exportExcel()" style="height:38px">↓ Esporta Excel</button>
+      </div>
+      <div id="statsRow" class="stats-row" style="display:none">
+        <div class="stat-card"><div class="val" id="statTot">0</div><div class="lbl">Prenotazioni</div></div>
+        <div class="stat-card"><div class="val" id="statLiberi">0</div><div class="lbl">Slot liberi</div></div>
+        <div class="stat-card"><div class="val" id="statPerc">0%</div><div class="lbl">Occupazione</div></div>
+      </div>
+      <div id="prenotazioniList"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL NUOVO EVENTO -->
+<div class="modal-bg" id="modalEvento">
+  <div class="modal">
+    <h3 id="modalTitle">Nuovo evento</h3>
+    <div id="msgModal" class="msg"></div>
+    <div class="form-row single"><div class="field">
+      <label>Nome evento *</label>
+      <input type="text" id="evNome" placeholder="es. Colloqui 5A — Aprile 2026"/>
+    </div></div>
+    <div class="form-row">
+      <div class="field"><label>Data *</label><input type="date" id="evData"/></div>
+      <div class="field"><label>Durata slot (minuti) *</label><input type="number" id="evDurata" value="10" min="1" max="60" onchange="updateSlotPreview()"/></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Orario inizio *</label><input type="time" id="evInizio" value="16:00" onchange="updateSlotPreview()"/></div>
+      <div class="field"><label>Orario fine *</label><input type="time" id="evFine" value="19:00" onchange="updateSlotPreview()"/></div>
+    </div>
+    <div class="form-row single"><div class="field">
+      <label>Classi (lascia vuoto se non serve il selettore)</label>
+      <div class="classi-input">
+        <input type="text" id="classeInput" placeholder="es. 2A" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addClasse()}"/>
+        <button class="btn btn-sm" onclick="addClasse()">Aggiungi</button>
+      </div>
+      <div class="classi-tags" id="classiTags"></div>
+    </div></div>
+    <div class="field" style="margin-bottom:.5rem"><label>Anteprima slot generati</label>
+      <div class="slot-preview" id="slotPreview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Annulla</button>
+      <button class="btn btn-primary" id="saveEventoBtn" onclick="saveEvento()">Salva evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LINK -->
+<div class="modal-bg" id="modalLink">
+  <div class="modal">
+    <h3>Evento creato!</h3>
+    <p style="color:var(--ink2);font-size:13px;margin-bottom:1rem">Condividi questo link con i genitori:</p>
+    <div class="link-box" id="linkBox">
+      <span id="linkText"></span>
+      <button class="copy-btn" onclick="copyLink()">Copia</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="document.getElementById('modalLink').classList.remove('show')">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://axhstwruvwpxvastlszg.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_oer2FV7QhDkZFG6bKZtp1g_KxJxrXmE';
+const PASSWORD = 'Colombara01!';
+const FORM_BASE = 'https://forteale.github.io/colloqui/form.html';
+
+// ── Auth ─────────────────────────────────────────────────────
+function doLogin() {
+  var pw = document.getElementById('pwInput').value;
+  if (pw === PASSWORD) {
+    sessionStorage.setItem('auth', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+  }
+}
+function doLogout() {
+  sessionStorage.removeItem('auth');
+  location.reload();
+}
+if (sessionStorage.getItem('auth') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+// ── Supabase API ─────────────────────────────────────────────
+async function sb(path, opts) {
+  var r = await fetch(SUPABASE_URL + '/rest/v1/' + path, Object.assign({
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    }
+  }, opts));
+  if (!r.ok) { var e = await r.text(); throw new Error(e); }
+  var txt = await r.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+// ── Nav ───────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'prenotazioni') { loadEventiFilter(); loadPrenotazioni(); }
+  if (name === 'eventi') loadEventi();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+function init() { loadEventi(); }
+
+// ── Slot generation ──────────────────────────────────────────
+function generateSlots(startTime, endTime, durata) {
+  var slots = [];
+  var [sh, sm] = startTime.split(':').map(Number);
+  var [eh, em] = endTime.split(':').map(Number);
+  var endMins = eh * 60 + em;
+  var h = sh, m = sm;
+  while (true) {
+    var cur = h * 60 + m;
+    if (cur + durata > endMins + durata) break;
+    if (cur >= endMins) break;
+    slots.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);
+    m += durata;
+    if (m >= 60) { m -= 60; h++; }
+  }
+  return slots;
+}
+
+function updateSlotPreview() {
+  var inizio = document.getElementById('evInizio').value;
+  var fine = document.getElementById('evFine').value;
+  var durata = parseInt(document.getElementById('evDurata').value) || 10;
+  if (!inizio || !fine) return;
+  var slots = generateSlots(inizio, fine, durata);
+  var prev = document.getElementById('slotPreview');
+  prev.innerHTML = slots.map(function(s){return '<div class="slot-chip">'+s+'</div>';}).join('') +
+    (slots.length ? '<div class="slot-chip" style="background:transparent;border-style:dashed;color:var(--accent)">'+slots.length+' slot</div>' : '');
+}
+
+// ── Classi tags ───────────────────────────────────────────────
+var classiList = [];
+function addClasse() {
+  var v = document.getElementById('classeInput').value.trim().toUpperCase();
+  if (v && !classiList.includes(v)) { classiList.push(v); renderTags(); }
+  document.getElementById('classeInput').value = '';
+}
+function removeClasse(c) { classiList = classiList.filter(function(x){return x!==c;}); renderTags(); }
+function renderTags() {
+  document.getElementById('classiTags').innerHTML = classiList.map(function(c){
+    return '<div class="tag">'+c+'<button onclick="removeClasse(\''+c+'\')">×</button></div>';
+  }).join('');
+}
+
+// ── Modal evento ──────────────────────────────────────────────
+var editingId = null;
+function openNewEventModal() {
+  editingId = null;
+  classiList = [];
+  document.getElementById('modalTitle').textContent = 'Nuovo evento';
+  document.getElementById('evNome').value = '';
+  document.getElementById('evData').value = '';
+  document.getElementById('evDurata').value = '10';
+  document.getElementById('evInizio').value = '16:00';
+  document.getElementById('evFine').value = '19:00';
+  document.getElementById('classiTags').innerHTML = '';
+  document.getElementById('slotPreview').innerHTML = '';
+  document.getElementById('msgModal').classList.remove('show');
+  document.getElementById('saveEventoBtn').textContent = 'Salva evento';
+  document.getElementById('modalEvento').classList.add('show');
+  updateSlotPreview();
+}
+function closeModal() { document.getElementById('modalEvento').classList.remove('show'); }
+
+async function saveEvento() {
+  var nome   = document.getElementById('evNome').value.trim();
+  var data   = document.getElementById('evData').value;
+  var durata = parseInt(document.getElementById('evDurata').value);
+  var inizio = document.getElementById('evInizio').value;
+  var fine   = document.getElementById('evFine').value;
+  if (!nome || !data || !durata || !inizio || !fine) {
+    showModalMsg('Compila tutti i campi obbligatori.', false); return;
+  }
+  var btn = document.getElementById('saveEventoBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Salvataggio…';
+  try {
+    var payload = {
+      nome: nome, data_evento: data, durata_slot: durata,
+      orario_inizio: inizio, orario_fine: fine,
+      classi: classiList.length > 0 ? classiList : null
+    };
+    var result;
+    if (editingId) {
+      result = await sb('eventi?id=eq.'+editingId, { method:'PATCH', body: JSON.stringify(payload) });
+    } else {
+      result = await sb('eventi', { method:'POST', body: JSON.stringify(payload) });
+    }
+    closeModal();
+    loadEventi();
+    if (!editingId && result && result[0]) {
+      var id = result[0].id;
+      var link = FORM_BASE + '?evento=' + id;
+      document.getElementById('linkText').textContent = link;
+      document.getElementById('modalLink').classList.add('show');
+    }
+  } catch(e) {
+    showModalMsg('Errore: ' + e.message, false);
+  }
+  btn.disabled = false; btn.textContent = editingId ? 'Salva modifiche' : 'Salva evento';
+}
+
+function showModalMsg(txt, ok) {
+  var el = document.getElementById('msgModal');
+  el.textContent = txt; el.className = 'msg show ' + (ok?'msg-ok':'msg-err');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById('linkText').textContent);
+  document.querySelector('.copy-btn').textContent = 'Copiato!';
+  setTimeout(function(){ document.querySelector('.copy-btn').textContent = 'Copia'; }, 1500);
+}
+
+// ── Lista eventi ──────────────────────────────────────────────
+async function loadEventi() {
+  try {
+    var eventi = await sb('eventi?order=data_evento.desc&select=*');
+    var el = document.getElementById('eventiList');
+    if (!eventi || !eventi.length) {
+      el.innerHTML = '<div style="color:var(--ink3);font-size:13px;padding:2rem 0">Nessun evento ancora. Creane uno!</div>';
+      return;
+    }
+    el.innerHTML = eventi.map(function(ev) {
+      var slots = generateSlots(ev.orario_inizio.slice(0,5), ev.orario_fine.slice(0,5), ev.durata_slot);
+      var link = FORM_BASE + '?evento=' + ev.id;
+      var classiStr = ev.classi ? ev.classi.join(', ') : 'Nessun selettore';
+      return '<div class="event-item">'+
+        '<div class="event-info">'+
+          '<h3>'+ev.nome+'</h3>'+
+          '<p>'+formatDate(ev.data_evento)+' · '+ev.orario_inizio.slice(0,5)+' – '+ev.orario_fine.slice(0,5)+
+          ' · '+ev.durata_slot+' min · '+slots.length+' slot · '+classiStr+'</p>'+
+          '<div class="link-box" style="margin-top:8px;max-width:500px">'+
+            '<span>'+link+'</span>'+
+            '<button class="copy-btn" onclick="copyText(\''+link+'\',this)">Copia</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="event-actions">'+
+          '<button class="btn btn-sm" onclick="editEvento(\''+ev.id+'\')">Modifica</button>'+
+          '<button class="btn btn-sm btn-danger" onclick="deleteEvento(\''+ev.id+'\',\''+ev.nome+'\')">Elimina</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  } catch(e) {
+    document.getElementById('eventiList').innerHTML = '<div style="color:var(--danger);font-size:13px">Errore caricamento: '+e.message+'</div>';
+  }
+}
+
+function copyText(txt, btn) {
+  navigator.clipboard.writeText(txt);
+  btn.textContent = 'Copiato!';
+  setTimeout(function(){ btn.textContent = 'Copia'; }, 1500);
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  var p = d.split('-');
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+async function editEvento(id) {
+  var ev = await sb('eventi?id=eq.'+id);
+  ev = ev[0];
+  editingId = id;
+  classiList = ev.classi || [];
+  document.getElementById('modalTitle').textContent = 'Modifica evento';
+  document.getElementById('evNome').value = ev.nome;
+  document.getElementById('evData').value = ev.data_evento;
+  document.getElementById('evDurata').value = ev.durata_slot;
+  document.getElementById('evInizio').value = ev.orario_inizio.slice(0,5);
+  document.getElementById('evFine').value = ev.orario_fine.slice(0,5);
+  document.getElementById('saveEventoBtn').textContent = 'Salva modifiche';
+  renderTags(); updateSlotPreview();
+  document.getElementById('msgModal').classList.remove('show');
+  document.getElementById('modalEvento').classList.add('show');
+}
+
+async function deleteEvento(id, nome) {
+  if (!confirm('Eliminare "'+nome+'" e tutte le sue prenotazioni?')) return;
+  await sb('eventi?id=eq.'+id, { method:'DELETE', headers:{
+    'apikey': SUPABASE_KEY, 'Authorization': 'Bearer '+SUPABASE_KEY,
+    'Content-Type':'application/json'
+  }});
+  loadEventi();
+}
+
+// ── Prenotazioni ──────────────────────────────────────────────
+async function loadEventiFilter() {
+  var eventi = await sb('eventi?order=data_evento.desc&select=id,nome,data_evento');
+  var sel = document.getElementById('filterEvento');
+  sel.innerHTML = '<option value="">— Tutti gli eventi —</option>' +
+    (eventi||[]).map(function(e){
+      return '<option value="'+e.id+'">'+e.nome+' ('+formatDate(e.data_evento)+')</option>';
+    }).join('');
+}
+
+async function loadPrenotazioni() {
+  var evId = document.getElementById('filterEvento').value;
+  var query = 'prenotazioni?order=orario.asc&select=*,eventi(nome,orario_inizio,orario_fine,durata_slot)';
+  if (evId) query = 'prenotazioni?evento_id=eq.'+evId+'&order=orario.asc&select=*,eventi(nome,orario_inizio,orario_fine,durata_slot)';
+  var rows = await sb(query) || [];
+
+  // Stats
+  if (evId && rows.length > 0) {
+    var ev = rows[0].eventi;
+    var totalSlots = generateSlots(ev.orario_inizio.slice(0,5), ev.orario_fine.slice(0,5), ev.durata_slot).length;
+    document.getElementById('statTot').textContent = rows.length;
+    document.getElementById('statLiberi').textContent = totalSlots - rows.length;
+    document.getElementById('statPerc').textContent = Math.round(rows.length/totalSlots*100)+'%';
+    document.getElementById('statsRow').style.display = 'grid';
+  } else {
+    document.getElementById('statsRow').style.display = 'none';
+  }
+
+  var el = document.getElementById('prenotazioniList');
+  if (!rows.length) { el.innerHTML = '<div style="color:var(--ink3);font-size:13px;padding:2rem 0">Nessuna prenotazione.</div>'; return; }
+  el.innerHTML = '<div class="card"><div class="table-wrap"><table>'+
+    '<thead><tr><th>Orario</th><th>Cognome</th><th>Nome</th><th>Classe</th><th>Evento</th><th></th></tr></thead>'+
+    '<tbody>'+rows.map(function(r){
+      return '<tr>'+
+        '<td><strong>'+r.orario+'</strong></td>'+
+        '<td>'+r.cognome+'</td>'+
+        '<td>'+r.nome+'</td>'+
+        '<td>'+(r.classe||'—')+'</td>'+
+        '<td style="color:var(--ink2)">'+(r.eventi?r.eventi.nome:'')+'</td>'+
+        '<td><button class="btn btn-sm btn-danger" onclick="deletePrenotazione(\''+r.id+'\')">Elimina</button></td>'+
+      '</tr>';
+    }).join('')+
+    '</tbody></table></div></div>';
+}
+
+async function deletePrenotazione(id) {
+  if (!confirm('Eliminare questa prenotazione?')) return;
+  await sb('prenotazioni?id=eq.'+id, { method:'DELETE', headers:{
+    'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'
+  }});
+  loadPrenotazioni();
+}
+
+// ── Export Excel ──────────────────────────────────────────────
+async function exportExcel() {
+  var evId = document.getElementById('filterEvento').value;
+  var query = evId
+    ? 'prenotazioni?evento_id=eq.'+evId+'&order=orario.asc&select=*,eventi(nome)'
+    : 'prenotazioni?order=orario.asc&select=*,eventi(nome)';
+  var rows = await sb(query) || [];
+  if (!rows.length) { alert('Nessuna prenotazione da esportare.'); return; }
+
+  var csv = 'Orario,Cognome,Nome,Classe,Evento\n';
+  rows.forEach(function(r){
+    csv += [r.orario, r.cognome, r.nome, r.classe||'', r.eventi?r.eventi.nome:''].map(function(v){
+      return '"'+(v||'').replace(/"/g,'""')+'"';
+    }).join(',')+'\n';
+  });
+
+  // Usa SheetJS se disponibile, altrimenti CSV con estensione .csv
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'prenotazioni_'+(evId?evId.slice(0,8):'tutti')+'.csv';
+  a.click();
+}
+</script>
+</body>
+</html>
