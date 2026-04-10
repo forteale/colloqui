@@ -10,686 +10,625 @@
 :root{
   --bg:#0F0F0F;--surface:#1A1A1A;--surface2:#222;--border:#2E2E2E;
   --ink:#F0EDE8;--ink2:#999;--ink3:#555;
-  --accent:#C8F060;--accent-dark:#A8D040;
+  --accent:#C8F060;--radius:10px;--radius-lg:16px;
   --danger:#FF5C5C;--danger-bg:#2A1515;
   --success:#60F0A0;--success-bg:#0F2A1A;
-  --warn:#F0C060;--warn-bg:#2A200F;
-  --radius:10px;--radius-lg:16px;
 }
 body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:15px;min-height:100vh;}
-
-/* LOGIN */
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
-.login-box{width:100%;max-width:360px;}
-.login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px;letter-spacing:-.5px;}
+.login-box{width:100%;max-width:340px;}
+.login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px;}
 .login-sub{color:var(--ink2);font-size:14px;margin-bottom:2rem;}
-.field-login{margin-bottom:12px;}
-.field-login label{display:block;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
-.field-login input{width:100%;height:46px;padding:0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:15px;outline:none;}
-.field-login input:focus{border-color:var(--accent);}
-.btn-accent{width:100%;height:48px;background:var(--accent);color:#0F0F0F;border:none;border-radius:var(--radius);font-family:'Syne',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;}
-.btn-accent:hover{opacity:.88;}
-.btn-accent:disabled{opacity:.4;cursor:not-allowed;}
+.fl{margin-bottom:12px;}
+.fl label{display:block;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.fl input{width:100%;height:46px;padding:0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:15px;outline:none;}
+.fl input:focus{border-color:var(--accent);}
+.btn-acc{width:100%;height:48px;background:var(--accent);color:#0F0F0F;border:none;border-radius:var(--radius);font-family:'Syne',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;}
+.btn-acc:hover{opacity:.88;}
 .login-err{color:var(--danger);font-size:13px;margin-top:8px;display:none;}
-
-/* LAYOUT */
-#app{display:none;min-height:100vh;}
+#app{display:none;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:50;}
-.topbar-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent);}
-.topbar-nav{display:flex;gap:2px;}
-.nav-btn{padding:7px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .12s,color .12s;}
-.nav-btn:hover{background:var(--surface);color:var(--ink);}
-.nav-btn.active{background:var(--surface2);color:var(--ink);}
-.topbar-user{display:flex;align-items:center;gap:10px;}
-.user-chip{font-size:13px;color:var(--ink2);}
-.logout-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:13px;cursor:pointer;}
-.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
-
-.page{display:none;padding:28px 24px;max-width:960px;margin:0 auto;}
+.tl{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent);}
+.tnav{display:flex;gap:2px;}
+.nb{padding:7px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .12s,color .12s;}
+.nb:hover{background:var(--surface);color:var(--ink);}
+.nb.active{background:var(--surface2);color:var(--ink);}
+.tu{display:flex;align-items:center;gap:10px;}
+.uc{font-size:13px;color:var(--ink2);}
+.lob{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:13px;cursor:pointer;}
+.lob:hover{border-color:var(--danger);color:var(--danger);}
+.page{display:none;padding:28px 24px;max-width:980px;margin:0 auto;}
 .page.active{display:block;}
-.section-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:600;margin-bottom:20px;}
-
-/* Cards */
+.st{font-family:'Syne',sans-serif;font-size:22px;font-weight:600;margin-bottom:20px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;}
-.card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:16px;}
-
-/* Form */
+.ct{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:16px;}
 .field{margin-bottom:14px;}
 .field:last-child{margin-bottom:0;}
 .field label{display:block;font-size:11px;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
 .field input,.field select,.field textarea{width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;transition:border-color .15s;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
+.field input:focus,.field select:focus{border-color:var(--accent);}
 .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
-
-/* Tags */
-.tags-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:7px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;min-height:42px;align-items:center;cursor:text;}
-.tags-wrap:focus-within{border-color:var(--accent);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+/* toggle */
+.toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0;}
+.toggle-label{font-size:14px;color:var(--ink);}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:99px;cursor:pointer;transition:background .2s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--ink3);border-radius:50%;transition:transform .2s,background .2s;}
+.toggle input:checked+.toggle-slider{background:var(--accent);border-color:var(--accent);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:#0F0F0F;}
+/* tags */
+.tw{display:flex;flex-wrap:wrap;gap:6px;padding:7px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;min-height:42px;align-items:center;cursor:text;}
+.tw:focus-within{border-color:var(--accent);}
 .tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;background:var(--surface);border:1px solid var(--border);border-radius:99px;font-size:13px;}
-.tag-x{cursor:pointer;color:var(--ink3);margin-left:2px;}
+.tag-x{cursor:pointer;color:var(--ink3);}
 .tag-x:hover{color:var(--danger);}
-.tag-input{border:none;background:transparent;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;min-width:80px;flex:1;}
-
-/* Buttons */
+.ti{border:none;background:transparent;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;min-width:80px;flex:1;}
+/* buttons */
 .btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .12s;}
 .btn:hover{background:var(--surface2);}
 .btn:disabled{opacity:.4;cursor:not-allowed;}
-.btn-primary{background:var(--accent);color:#0F0F0F;border-color:transparent;font-weight:500;}
-.btn-primary:hover{opacity:.88;background:var(--accent);}
-.btn-danger{color:var(--danger);}
-.btn-danger:hover{background:var(--danger-bg);border-color:var(--danger-bg);}
+.btn-p{background:var(--accent);color:#0F0F0F;border-color:transparent;font-weight:500;}
+.btn-p:hover{opacity:.88;background:var(--accent);}
+.btn-d{color:var(--danger);}
+.btn-d:hover{background:var(--danger-bg);border-color:var(--danger-bg);}
 .btn-sm{padding:5px 11px;font-size:13px;}
-.btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
-
-/* Tables */
-.tbl-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);}
-table{width:100%;border-collapse:collapse;min-width:600px;}
+.brow{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+/* tables */
+.tw-outer{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;min-width:500px;}
 th{text-align:left;font-size:11px;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface);white-space:nowrap;cursor:pointer;user-select:none;}
 th:hover{color:var(--ink);}
-th .sort-icon{margin-left:4px;opacity:.5;}
-th.sorted .sort-icon{opacity:1;color:var(--accent);}
+th.sorted .si{color:var(--accent);opacity:1;}
+.si{margin-left:4px;opacity:.4;font-size:11px;}
 td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--surface2);}
-.td-actions{display:flex;gap:6px;white-space:nowrap;}
-
-/* Badges */
+.tda{display:flex;gap:6px;white-space:nowrap;}
 .badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;}
-.badge-class{background:var(--surface2);color:var(--ink2);border:1px solid var(--border);}
-.badge-admin{background:#1A1A2E;color:#8888FF;border:1px solid #333366;}
-.badge-user{background:var(--surface2);color:var(--ink2);border:1px solid var(--border);}
-
-/* Slot preview */
-.slot-preview{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
-.slot-chip{padding:3px 9px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--ink2);}
-.slot-info{font-size:12px;color:var(--ink2);margin-bottom:6px;}
-
-/* Custom fields builder */
-.campos-list{display:flex;flex-direction:column;gap:8px;}
-.campo-row{display:grid;grid-template-columns:1fr 120px 90px 80px auto;gap:8px;align-items:center;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;}
-.campo-row input,.campo-row select{padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;width:100%;}
-.campo-row input:focus,.campo-row select:focus{border-color:var(--accent);}
-.campo-opzioni{grid-column:1/-1;padding:0 2px;}
-.campo-opzioni input{width:100%;}
-.add-campo-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;width:100%;justify-content:center;margin-top:4px;}
-.add-campo-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-/* Stats */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
-.stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--accent);}
-.stat-label{font-size:12px;color:var(--ink2);margin-top:4px;}
-
-/* Link box */
-.link-box{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--accent);word-break:break-all;font-family:monospace;}
-.copy-btn{flex-shrink:0;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:12px;cursor:pointer;}
-.copy-btn:hover{background:var(--surface);}
-
-/* Toast */
+.ba{background:#1A1A2E;color:#8888FF;border:1px solid #333366;}
+.bu{background:var(--surface2);color:var(--ink2);border:1px solid var(--border);}
+/* slot preview */
+.sp{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.sc{padding:3px 9px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--ink2);}
+/* gruppi */
+.gruppo-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;}
+.gruppo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.gruppo-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--accent);}
+.add-gruppo{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.add-gruppo:hover{border-color:var(--accent);color:var(--accent);}
+/* campi builder */
+.cl{display:flex;flex-direction:column;gap:8px;}
+.crow{display:grid;grid-template-columns:1fr 110px 90px auto;gap:8px;align-items:start;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+.crow input,.crow select{padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;width:100%;}
+.crow input:focus,.crow select:focus{border-color:var(--accent);}
+.crow-opt{grid-column:1/-1;}
+.add-campo{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;width:100%;margin-top:4px;}
+.add-campo:hover{border-color:var(--accent);color:var(--accent);}
+/* stats */
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.sc2{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+.sv{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--accent);}
+.sl{font-size:12px;color:var(--ink2);margin-top:4px;}
+/* copy btn */
+.cpb{flex-shrink:0;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:12px;cursor:pointer;}
+.cpb:hover{background:var(--surface);}
+/* toast */
 .toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;font-size:14px;z-index:999;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
-.toast-ok{background:var(--success-bg);color:var(--success);border:1px solid #1A4A2A;}
-.toast-err{background:var(--danger-bg);color:var(--danger);border:1px solid #4A1A1A;}
-
+.tok{background:var(--success-bg);color:var(--success);border:1px solid #1A4A2A;}
+.terr{background:var(--danger-bg);color:var(--danger);border:1px solid #4A1A1A;}
 .empty{text-align:center;padding:3rem;color:var(--ink3);font-size:14px;}
-.spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+.spi{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Divider */
-.divider{height:1px;background:var(--border);margin:20px 0;}
-
-@media(max-width:700px){
-  .row2,.row3,.row4{grid-template-columns:1fr;}
-  .campo-row{grid-template-columns:1fr 1fr;gap:6px;}
-  .topbar-nav .nav-btn span{display:none;}
-  .page{padding:16px;}
-}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+@media(max-width:700px){.r2,.r3,.r4{grid-template-columns:1fr;}.crow{grid-template-columns:1fr 1fr;}.page{padding:16px;}.tnav .nb span{display:none;}}
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">SlotBook</div>
     <div class="login-sub">Gestione prenotazioni — Backoffice</div>
-    <div class="field-login"><label>Username</label><input type="text" id="loginUser" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <div class="field-login"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-    <button class="btn-accent" onclick="doLogin()">Accedi</button>
-    <div class="login-err" id="loginErr">Credenziali errate.</div>
+    <div class="fl"><label>Username</label><input type="text" id="lu" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="fl"><label>Password</label><input type="password" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn-acc" onclick="doLogin()">Accedi</button>
+    <div class="login-err" id="lerr">Credenziali errate.</div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo">SlotBook</div>
-    <div class="topbar-nav">
-      <button class="nav-btn active" id="navEventi" onclick="showPage('eventi')"><span>🗓 </span>Eventi</button>
-      <button class="nav-btn" id="navNuovo" onclick="showPage('nuovo')"><span>+ </span>Nuovo</button>
-      <button class="nav-btn" id="navPrenotazioni" onclick="showPage('prenotazioni')"><span>📋 </span>Prenotazioni</button>
-      <button class="nav-btn admin-only" id="navUtenti" onclick="showPage('utenti')" style="display:none"><span>👤 </span>Utenti</button>
+    <div class="tl">SlotBook</div>
+    <div class="tnav">
+      <button class="nb active" id="navEventi" onclick="showPage('eventi')"><span>🗓 </span>Eventi</button>
+      <button class="nb" id="navNuovo" onclick="showPage('nuovo')"><span>+ </span>Nuovo</button>
+      <button class="nb" id="navPrenotazioni" onclick="showPage('prenotazioni')"><span>📋 </span>Prenotazioni</button>
+      <button class="nb" id="navUtenti" onclick="showPage('utenti')" style="display:none"><span>👤 </span>Utenti</button>
     </div>
-    <div class="topbar-user">
-      <span class="user-chip" id="userChip"></span>
-      <button class="logout-btn" onclick="doLogout()">Esci</button>
-    </div>
+    <div class="tu"><span class="uc" id="uc"></span><button class="lob" onclick="doLogout()">Esci</button></div>
   </div>
 
   <!-- EVENTI -->
   <div id="pageEventi" class="page active">
-    <div class="section-title">I tuoi eventi</div>
-    <div id="eventiList"><div class="empty">Caricamento…</div></div>
+    <div class="st">I tuoi eventi</div>
+    <div id="evList"><div class="empty">Caricamento…</div></div>
   </div>
 
-  <!-- NUOVO / MODIFICA EVENTO -->
+  <!-- NUOVO/MODIFICA -->
   <div id="pageNuovo" class="page">
-    <div class="section-title" id="formTitle">Nuovo evento</div>
+    <div class="st" id="ftitle">Nuovo evento</div>
 
     <div class="card">
-      <div class="card-title">Informazioni generali</div>
-      <div class="row2">
-        <div class="field"><label>Nome evento *</label><input type="text" id="evNome" placeholder="Colloqui 5A — Aprile 2026" oninput="autoSlug()"/></div>
-        <div class="field"><label>Slug (link corto) *</label><input type="text" id="evSlug" placeholder="colloqui-5a-apr26"/><div style="font-size:11px;color:var(--ink3);margin-top:4px">Solo lettere, numeri e trattini. Usato nell'URL del form.</div></div>
+      <div class="ct">Informazioni generali</div>
+      <div class="r2">
+        <div class="field"><label>Nome evento *</label><input type="text" id="eNome" placeholder="Colloqui — Aprile 2026" oninput="autoSlug()"/></div>
+        <div class="field"><label>Slug (link corto) *</label><input type="text" id="eSlug" placeholder="colloqui-apr26"/><div style="font-size:11px;color:var(--ink3);margin-top:3px">Solo lettere, numeri, trattini</div></div>
       </div>
-      <div class="row2">
-        <div class="field"><label>Data *</label><input type="date" id="evData"/></div>
-        <div class="field">
-          <label>Classi (opzionale)</label>
-          <div class="tags-wrap" id="classiWrap" onclick="document.getElementById('classiInput').focus()">
-            <input class="tag-input" id="classiInput" placeholder="es. 2A poi Invio…" onkeydown="handleClasseInput(event)"/>
-          </div>
-          <div style="font-size:11px;color:var(--ink3);margin-top:4px">Lascia vuoto se non serve il selettore classe</div>
-        </div>
+      <div class="field" style="max-width:220px"><label>Data *</label><input type="date" id="eData"/></div>
+      <div class="divider"></div>
+      <div class="toggle-row">
+        <label class="toggle"><input type="checkbox" id="eSlotAttivi" checked/><span class="toggle-slider"></span></label>
+        <span class="toggle-label">Prenotazione oraria attiva</span>
+        <span style="font-size:12px;color:var(--ink3);margin-left:4px">(disattiva per raccogliere solo dati senza slot)</span>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Orari</div>
-      <div class="row3">
-        <div class="field"><label>Inizio *</label><input type="time" id="evInizio" value="16:00" oninput="updateSlotPreview()"/></div>
-        <div class="field"><label>Fine *</label><input type="time" id="evFine" value="19:00" oninput="updateSlotPreview()"/></div>
-        <div class="field"><label>Durata slot (min) *</label><input type="number" id="evDurata" value="10" min="1" max="120" oninput="updateSlotPreview()"/></div>
-      </div>
-      <div class="slot-info" id="slotInfo"></div>
-      <div class="slot-preview" id="slotPreview"></div>
+    <!-- GRUPPI CLASSE (visibili solo se slot attivi) -->
+    <div id="gruppiSection" class="card">
+      <div class="ct">Gruppi classe e orari</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:14px">Ogni gruppo ha le sue classi e i suoi orari. Classi dello stesso gruppo condividono gli stessi slot.</div>
+      <div id="gruppiList"></div>
+      <button class="add-gruppo" onclick="addGruppo()">+ Aggiungi gruppo</button>
     </div>
 
+    <!-- CAMPI CUSTOM -->
     <div class="card">
-      <div class="card-title">Campi personalizzati</div>
-      <div style="font-size:13px;color:var(--ink2);margin-bottom:14px">Oltre a Cognome, Nome e Classe (già inclusi), puoi aggiungere altri campi al form.</div>
-      <div class="campos-list" id="camposList"></div>
-      <button class="add-campo-btn" onclick="addCampo()">+ Aggiungi campo</button>
+      <div class="ct">Campi personalizzati</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:14px">Oltre a Cognome, Nome e Classe (sempre inclusi), puoi aggiungere altri campi.</div>
+      <div class="cl" id="campiList"></div>
+      <button class="add-campo" onclick="addCampo()">+ Aggiungi campo</button>
     </div>
 
-    <div class="btn-row">
+    <div class="brow">
       <button class="btn" onclick="showPage('eventi')">Annulla</button>
-      <button class="btn btn-primary" id="saveBtn" onclick="salvaEvento()">Salva evento</button>
+      <button class="btn btn-p" id="saveBtn" onclick="salvaEvento()">Salva evento</button>
     </div>
   </div>
 
   <!-- PRENOTAZIONI -->
   <div id="pagePrenotazioni" class="page">
-    <div class="section-title">Prenotazioni</div>
+    <div class="st">Prenotazioni</div>
     <div class="card" style="padding:16px">
       <div class="field" style="margin:0"><label>Seleziona evento</label>
-        <select id="prenSel" onchange="loadPrenotazioni()"><option value="">— scegli —</option></select>
+        <select id="pSel" onchange="loadPren()"><option value="">— scegli —</option></select>
       </div>
     </div>
-    <div id="statsRow" style="display:none" class="stats-row">
-      <div class="stat-card"><div class="stat-val" id="statTot">0</div><div class="stat-label">Slot totali</div></div>
-      <div class="stat-card"><div class="stat-val" id="statPren">0</div><div class="stat-label">Prenotati</div></div>
-      <div class="stat-card"><div class="stat-val" id="statLiberi">0</div><div class="stat-label">Liberi</div></div>
+    <div id="statsRow" style="display:none" class="srow">
+      <div class="sc2"><div class="sv" id="stTot">0</div><div class="sl">Slot totali</div></div>
+      <div class="sc2"><div class="sv" id="stPren">0</div><div class="sl">Prenotati</div></div>
+      <div class="sc2"><div class="sv" id="stLib">0</div><div class="sl">Liberi</div></div>
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px" id="exportBar" style="display:none">
-      <button class="btn btn-sm" onclick="exportExcel()">⬇ Esporta Excel</button>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px" id="expBar" style="display:none">
+      <button class="btn btn-sm" onclick="exportXL()">⬇ Esporta Excel</button>
     </div>
     <div id="prenList"><div class="empty">Seleziona un evento.</div></div>
   </div>
 
-  <!-- UTENTI (solo admin) -->
+  <!-- UTENTI -->
   <div id="pageUtenti" class="page">
-    <div class="section-title">Gestione utenti</div>
+    <div class="st">Gestione utenti</div>
     <div class="card">
-      <div class="card-title">Aggiungi utente</div>
-      <div class="row3">
-        <div class="field"><label>Username *</label><input type="text" id="nuovoUsername" placeholder="mario.rossi"/></div>
-        <div class="field"><label>Password *</label><input type="text" id="nuovoPassword" placeholder="Password123"/></div>
-        <div class="field"><label>Ruolo</label>
-          <select id="nuovoRuolo"><option value="user">Utente</option><option value="admin">Admin</option></select>
-        </div>
+      <div class="ct">Aggiungi utente</div>
+      <div class="r3">
+        <div class="field"><label>Username *</label><input type="text" id="nUser" placeholder="mario.rossi"/></div>
+        <div class="field"><label>Password *</label><input type="text" id="nPass" placeholder="Password123"/></div>
+        <div class="field"><label>Ruolo</label><select id="nRuolo"><option value="user">Utente</option><option value="admin">Admin</option></select></div>
       </div>
-      <div class="btn-row"><button class="btn btn-primary" onclick="aggiungiUtente()">Aggiungi utente</button></div>
+      <div class="brow"><button class="btn btn-p" onclick="addUser()">Aggiungi</button></div>
     </div>
-    <div class="tbl-wrap" id="utentiList"><div class="empty">Caricamento…</div></div>
+    <div class="tw-outer" id="userList"><div class="empty">Caricamento…</div></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const SB_URL = 'https://axhstwruvwpxvastlszg.supabase.co';
-const SB_KEY = 'sb_publishable_oer2FV7QhDkZFG6bKZtp1g_KxJxrXmE';
+const SB='https://axhstwruvwpxvastlszg.supabase.co';
+const KEY='sb_publishable_oer2FV7QhDkZFG6bKZtp1g_KxJxrXmE';
+var CU=null, editId=null, gruppi=[], campi=[], gCnt=0, cCnt=0, sortCol='orario', sortDir=1, curEv=null, curPren=[];
 
-var currentUser = null;
-var editingId = null;
-var classiTags = [];
-var campiList = [];
-var currentEvento = null;
-var currentPrenotazioni = [];
-var sortCol = 'orario';
-var sortDir = 1;
-
-// ── Supabase ──────────────────────────────────────────────────
-async function sb(path, opts) {
-  var headers = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' };
-  if (opts && opts.headers) Object.assign(headers, opts.headers);
-  var res = await fetch(SB_URL + '/rest/v1/' + path, Object.assign({ headers }, opts || {}));
-  if (!res.ok) { var e = await res.text(); throw new Error(e); }
-  var ct = res.headers.get('content-type') || '';
-  return ct.includes('json') ? res.json() : res.text();
+async function sb(path,opts){
+  var h={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+  if(opts&&opts.headers) Object.assign(h,opts.headers);
+  var r=await fetch(SB+'/rest/v1/'+path,Object.assign({headers:h},opts||{}));
+  if(!r.ok) throw new Error(await r.text());
+  var ct=r.headers.get('content-type')||''; return ct.includes('json')?r.json():r.text();
 }
 
-// ── Auth ──────────────────────────────────────────────────────
-async function doLogin() {
-  var u = document.getElementById('loginUser').value.trim();
-  var p = document.getElementById('loginPass').value;
-  if (!u || !p) return;
-  try {
-    var users = await sb('utenti?username=eq.' + encodeURIComponent(u) + '&password=eq.' + encodeURIComponent(p) + '&select=*');
-    if (!users.length) { document.getElementById('loginErr').style.display = 'block'; return; }
-    currentUser = users[0];
-    sessionStorage.setItem('sb_user', JSON.stringify(currentUser));
-    startApp();
-  } catch(e) { document.getElementById('loginErr').style.display = 'block'; }
+async function doLogin(){
+  var u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
+  if(!u||!p) return;
+  try{
+    var us=await sb('utenti?username=eq.'+encodeURIComponent(u)+'&password=eq.'+encodeURIComponent(p)+'&select=*');
+    if(!us.length){document.getElementById('lerr').style.display='block';return;}
+    CU=us[0]; sessionStorage.setItem('sbU',JSON.stringify(CU)); startApp();
+  }catch(e){document.getElementById('lerr').style.display='block';}
 }
-
-function doLogout() { sessionStorage.removeItem('sb_user'); location.reload(); }
-
-function startApp() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('userChip').textContent = currentUser.username + (currentUser.ruolo === 'admin' ? ' (admin)' : '');
-  if (currentUser.ruolo === 'admin') document.getElementById('navUtenti').style.display = '';
-  loadEventi();
-  initPrenotazioni();
-}
-
-var saved = sessionStorage.getItem('sb_user');
-if (saved) { currentUser = JSON.parse(saved); startApp(); }
-
-// ── Navigation ────────────────────────────────────────────────
-function showPage(p) {
-  document.querySelectorAll('.page').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.nav-btn').forEach(function(el) { el.classList.remove('active'); });
-  var pid = 'page' + p.charAt(0).toUpperCase() + p.slice(1);
-  document.getElementById(pid).classList.add('active');
-  var nid = 'nav' + p.charAt(0).toUpperCase() + p.slice(1);
-  if (document.getElementById(nid)) document.getElementById(nid).classList.add('active');
-  if (p === 'eventi') loadEventi();
-  if (p === 'prenotazioni') initPrenotazioni();
-  if (p === 'utenti') loadUtenti();
-  if (p === 'nuovo') { if (!editingId) resetForm(); updateSlotPreview(); }
-}
-
-// ── Toast ─────────────────────────────────────────────────────
-function toast(msg, ok) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (ok === false ? 'toast-err' : 'toast-ok');
-  setTimeout(function() { t.classList.remove('show'); }, 3000);
-}
-
-// ── Slug ──────────────────────────────────────────────────────
-function autoSlug() {
-  if (editingId) return;
-  var v = document.getElementById('evNome').value;
-  var slug = v.toLowerCase().replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i').replace(/[òóô]/g,'o').replace(/[ùúû]/g,'u').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  document.getElementById('evSlug').value = slug;
-}
-
-// ── Slot preview ──────────────────────────────────────────────
-function generateSlots(ini, fin, dur) {
-  var slots = [], p = ini.split(':'), h = +p[0], m = +p[1];
-  var fp = fin.split(':'), fmin = +fp[0]*60 + +fp[1];
-  while (h*60+m < fmin && slots.length < 300) {
-    slots.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);
-    m += dur; if (m>=60){m-=60;h++;}
-  }
-  return slots;
-}
-function updateSlotPreview() {
-  var ini = document.getElementById('evInizio').value;
-  var fin = document.getElementById('evFine').value;
-  var dur = parseInt(document.getElementById('evDurata').value)||10;
-  if (!ini||!fin) return;
-  var slots = generateSlots(ini, fin, dur);
-  document.getElementById('slotInfo').textContent = slots.length + ' slot da ' + dur + ' min';
-  document.getElementById('slotPreview').innerHTML = slots.map(function(s){return '<span class="slot-chip">'+s+'</span>';}).join('');
-}
-
-// ── Tags classi ───────────────────────────────────────────────
-function handleClasseInput(e) {
-  if (e.key==='Enter'||e.key===',') {
-    e.preventDefault();
-    var v = document.getElementById('classiInput').value.trim().toUpperCase();
-    if (v && !classiTags.includes(v)) { classiTags.push(v); renderTags(); }
-    document.getElementById('classiInput').value = '';
-  }
-  if (e.key==='Backspace' && !document.getElementById('classiInput').value && classiTags.length) {
-    classiTags.pop(); renderTags();
-  }
-}
-function renderTags() {
-  var wrap = document.getElementById('classiWrap');
-  wrap.querySelectorAll('.tag').forEach(function(t){t.remove();});
-  classiTags.forEach(function(c,i){
-    var tag = document.createElement('span'); tag.className='tag';
-    tag.innerHTML = c + '<span class="tag-x" onclick="removeTag('+i+')">×</span>';
-    wrap.insertBefore(tag, document.getElementById('classiInput'));
+function doLogout(){sessionStorage.removeItem('sbU');location.reload();}
+function startApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('uc').textContent=CU.username+(CU.ruolo==='admin'?' (admin)':'');
+  if(CU.ruolo==='admin') document.getElementById('navUtenti').style.display='';
+  loadEventi(); initPren();
+  document.getElementById('eSlotAttivi').addEventListener('change',function(){
+    document.getElementById('gruppiSection').style.display=this.checked?'':'none';
   });
 }
-function removeTag(i) { classiTags.splice(i,1); renderTags(); }
+var sv=sessionStorage.getItem('sbU'); if(sv){CU=JSON.parse(sv); startApp();}
 
-// ── Campi custom builder ──────────────────────────────────────
-var campoCounter = 0;
-function addCampo(data) {
-  var id = ++campoCounter;
-  var d = data || { etichetta:'', tipo:'testo', obbligatorio:false, opzioni:[] };
-  var item = { id:id, etichetta:d.etichetta, tipo:d.tipo, obbligatorio:d.obbligatorio, opzioni:(d.opzioni||[]).join(', '), dbId:d.dbId||null };
-  campiList.push(item);
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.nb').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('page'+p.charAt(0).toUpperCase()+p.slice(1)).classList.add('active');
+  var n=document.getElementById('nav'+p.charAt(0).toUpperCase()+p.slice(1));
+  if(n) n.classList.add('active');
+  if(p==='eventi') loadEventi();
+  if(p==='prenotazioni') initPren();
+  if(p==='utenti') loadUsers();
+  if(p==='nuovo'&&!editId){resetForm();}
+}
+
+function toast(m,ok){
+  var t=document.getElementById('toast');
+  t.textContent=m; t.className='toast show '+(ok===false?'terr':'tok');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+function autoSlug(){
+  if(editId) return;
+  var v=document.getElementById('eNome').value;
+  document.getElementById('eSlug').value=v.toLowerCase().replace(/[àá]/g,'a').replace(/[èé]/g,'e').replace(/[ìí]/g,'i').replace(/[òó]/g,'o').replace(/[ùú]/g,'u').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+function genSlots(ini,fin,dur){
+  var s=[],p=ini.split(':'),h=+p[0],m=+p[1],fp=fin.split(':'),fm=+fp[0]*60+ +fp[1];
+  while(h*60+m<fm&&s.length<300){s.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);m+=dur;if(m>=60){m-=60;h++;}}
+  return s;
+}
+
+// ── GRUPPI ───────────────────────────────────────────────────
+function addGruppo(data){
+  var id=++gCnt;
+  var d=data||{nome:'',classi:[],orario_inizio:'16:00',orario_fine:'19:00',durata_slot:10};
+  gruppi.push({id:id,nome:d.nome,classi:d.classi||[],ini:d.orario_inizio||'16:00',fin:d.orario_fine||'19:00',dur:d.durata_slot||10,dbId:d.dbId||null});
+  renderGruppi();
+}
+function removeGruppo(id){gruppi=gruppi.filter(function(g){return g.id!==id;});renderGruppi();}
+function updateGruppo(id,k,v){var g=gruppi.find(function(x){return x.id===id;});if(g){g[k]=v;if(k==='ini'||k==='fin'||k==='dur')renderGruppoPreview(id);}}
+
+function renderGruppi(){
+  var el=document.getElementById('gruppiList');
+  if(!gruppi.length){el.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:8px">Nessun gruppo. Aggiungine almeno uno.</div>';return;}
+  el.innerHTML=gruppi.map(function(g){
+    var tagsHtml=g.classi.map(function(c,i){return'<span class="tag">'+c+'<span class="tag-x" onclick="removeGTag('+g.id+','+i+')">×</span></span>';}).join('');
+    return'<div class="gruppo-card" id="gc'+g.id+'">'+
+      '<div class="gruppo-header"><span class="gruppo-title">Gruppo '+(gruppi.indexOf(g)+1)+'</span>'+
+      '<button class="btn btn-sm btn-d" onclick="removeGruppo('+g.id+')">Rimuovi</button></div>'+
+      '<div class="r2" style="margin-bottom:10px">'+
+        '<div class="field" style="margin:0"><label>Nome gruppo</label><input type="text" value="'+escH(g.nome)+'" placeholder="es. 2A e 2B" oninput="updateGruppo('+g.id+',\'nome\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Classi (Invio per aggiungere)</label>'+
+          '<div class="tw" id="gtw'+g.id+'" onclick="document.getElementById(\'gti'+g.id+'\').focus()">'+
+            tagsHtml+'<input class="ti" id="gti'+g.id+'" placeholder="es. 2A…" onkeydown="handleGTag(event,'+g.id+')"/>'+
+          '</div></div>'+
+      '</div>'+
+      '<div class="r3">'+
+        '<div class="field" style="margin:0"><label>Inizio</label><input type="time" value="'+g.ini+'" oninput="updateGruppo('+g.id+',\'ini\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Fine</label><input type="time" value="'+g.fin+'" oninput="updateGruppo('+g.id+',\'fin\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Durata slot (min)</label><input type="number" value="'+g.dur+'" min="1" max="120" oninput="updateGruppo('+g.id+',\'dur\',+this.value)"/></div>'+
+      '</div>'+
+      '<div id="gsp'+g.id+'" style="margin-top:8px"></div>'+
+    '</div>';
+  }).join('');
+  gruppi.forEach(function(g){renderGruppoPreview(g.id);});
+}
+function renderGruppoPreview(id){
+  var g=gruppi.find(function(x){return x.id===id;}); if(!g) return;
+  var el=document.getElementById('gsp'+id); if(!el) return;
+  var s=genSlots(g.ini,g.fin,g.dur||10);
+  el.innerHTML='<div style="font-size:11px;color:var(--ink2);margin-bottom:4px">'+s.length+' slot da '+g.dur+' min</div>'+
+    '<div class="sp">'+s.map(function(x){return'<span class="sc">'+x+'</span>';}).join('')+'</div>';
+}
+function handleGTag(e,gid){
+  if(e.key==='Enter'||e.key===','){
+    e.preventDefault();
+    var v=document.getElementById('gti'+gid).value.trim().toUpperCase();
+    var g=gruppi.find(function(x){return x.id===gid;});
+    if(v&&g&&!g.classi.includes(v)){g.classi.push(v);renderGruppi();}
+    document.getElementById('gti'+gid).value='';
+  }
+  if(e.key==='Backspace'){var inp=document.getElementById('gti'+gid);if(!inp.value){var g=gruppi.find(function(x){return x.id===gid;});if(g&&g.classi.length){g.classi.pop();renderGruppi();}}}
+}
+function removeGTag(gid,i){var g=gruppi.find(function(x){return x.id===gid;});if(g){g.classi.splice(i,1);renderGruppi();}}
+
+// ── CAMPI ────────────────────────────────────────────────────
+function addCampo(data){
+  var id=++cCnt;
+  var d=data||{etichetta:'',tipo:'testo',obbligatorio:false,opzioni:[]};
+  campi.push({id:id,etichetta:d.etichetta,tipo:d.tipo,obbligatorio:d.obbligatorio,opzioni:(d.opzioni||[]).join(', '),dbId:d.dbId||null});
   renderCampi();
 }
-function removeCampo(id) { campiList = campiList.filter(function(c){return c.id!==id;}); renderCampi(); }
-function renderCampi() {
-  var list = document.getElementById('camposList');
-  if (!campiList.length) { list.innerHTML = '<div style="font-size:13px;color:var(--ink3);padding:8px">Nessun campo aggiuntivo.</div>'; return; }
-  list.innerHTML = campiList.map(function(c) {
-    var showOpt = c.tipo==='select';
-    return '<div class="campo-row" id="cRow'+c.id+'">' +
-      '<input type="text" value="'+escHtml(c.etichetta)+'" placeholder="Etichetta campo" oninput="updateCampo('+c.id+',\'etichetta\',this.value)"/>' +
-      '<select onchange="updateCampo('+c.id+',\'tipo\',this.value)">' +
-        ['testo','numero','email','telefono','data','select','checkbox'].map(function(t){
-          return '<option value="'+t+'"'+(c.tipo===t?' selected':'')+'>'+t+'</option>';
-        }).join('') +
-      '</select>' +
-      '<select onchange="updateCampo('+c.id+',\'obbligatorio\',this.value===\'true\')">' +
-        '<option value="false"'+(c.obbligatorio?'':' selected')+'>Opzionale</option>' +
-        '<option value="true"'+(c.obbligatorio?' selected':'')+'>Obbligatorio</option>' +
-      '</select>' +
-      '<button class="btn btn-sm btn-danger" onclick="removeCampo('+c.id+')">Rimuovi</button>' +
-      (showOpt ? '<div class="campo-opzioni"><input type="text" value="'+escHtml(c.opzioni)+'" placeholder="Opzioni separate da virgola" oninput="updateCampo('+c.id+',\'opzioni\',this.value)"/></div>' : '') +
+function removeCampo(id){campi=campi.filter(function(c){return c.id!==id;});renderCampi();}
+function updateCampo(id,k,v){var c=campi.find(function(x){return x.id===id;});if(c){c[k]=v;if(k==='tipo')renderCampi();}}
+function renderCampi(){
+  var el=document.getElementById('campiList');
+  if(!campi.length){el.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:8px">Nessun campo aggiuntivo.</div>';return;}
+  el.innerHTML=campi.map(function(c){
+    var tipi=['testo','numero','email','telefono','data','select','checkbox'];
+    return'<div class="crow">'+
+      '<input type="text" value="'+escH(c.etichetta)+'" placeholder="Etichetta" oninput="updateCampo('+c.id+',\'etichetta\',this.value)"/>'+
+      '<select onchange="updateCampo('+c.id+',\'tipo\',this.value)">'+tipi.map(function(t){return'<option'+(c.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'+
+      '<select onchange="updateCampo('+c.id+',\'obbligatorio\',this.value===\'true\')"><option value="false"'+(c.obbligatorio?'':' selected')+'>Opzionale</option><option value="true"'+(c.obbligatorio?' selected':'')+'>Obbligatorio</option></select>'+
+      '<button class="btn btn-sm btn-d" onclick="removeCampo('+c.id+')">✕</button>'+
+      (c.tipo==='select'?'<div class="crow-opt"><input type="text" value="'+escH(c.opzioni)+'" placeholder="Opzioni separate da virgola" oninput="updateCampo('+c.id+',\'opzioni\',this.value)"/></div>':'')+
     '</div>';
   }).join('');
 }
-function updateCampo(id, key, val) {
-  var c = campiList.find(function(x){return x.id===id;});
-  if (c) { c[key]=val; if(key==='tipo') renderCampi(); }
-}
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-// ── Salva evento ──────────────────────────────────────────────
-async function salvaEvento() {
-  var nome = document.getElementById('evNome').value.trim();
-  var slug = document.getElementById('evSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
-  var data = document.getElementById('evData').value;
-  var inizio = document.getElementById('evInizio').value;
-  var fine = document.getElementById('evFine').value;
-  var durata = parseInt(document.getElementById('evDurata').value);
-  if (!nome||!slug||!data||!inizio||!fine||!durata) { toast('Compila tutti i campi obbligatori (*).', false); return; }
-  var btn = document.getElementById('saveBtn');
-  btn.innerHTML = '<span class="spinner-inline"></span>Salvo…'; btn.disabled = true;
-  try {
-    var payload = { nome, slug, data_evento:data, orario_inizio:inizio, orario_fine:fine, durata_slot:durata, classi:classiTags.length?classiTags:null, utente_id:currentUser.id };
+// ── SALVA EVENTO ─────────────────────────────────────────────
+async function salvaEvento(){
+  var nome=document.getElementById('eNome').value.trim();
+  var slug=document.getElementById('eSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
+  var data=document.getElementById('eData').value;
+  var slotAttivi=document.getElementById('eSlotAttivi').checked;
+  if(!nome||!slug||!data){toast('Compila nome, slug e data.',false);return;}
+  if(slotAttivi&&!gruppi.length){toast('Aggiungi almeno un gruppo di classi.',false);return;}
+  if(slotAttivi&&gruppi.some(function(g){return!g.classi.length;})){toast('Ogni gruppo deve avere almeno una classe.',false);return;}
+  var btn=document.getElementById('saveBtn');
+  btn.innerHTML='<span class="spi"></span>Salvo…';btn.disabled=true;
+  try{
+    var payload={nome,slug,data_evento:data,slot_attivi:slotAttivi,utente_id:CU.id};
     var evId;
-    if (editingId) {
-      await sb('eventi?id=eq.'+editingId, { method:'PATCH', body:JSON.stringify(payload) });
-      evId = editingId;
-      // Aggiorna campi: elimina vecchi e reinserisci
-      await sb('campi?evento_id=eq.'+evId, { method:'DELETE' });
-    } else {
-      var res = await sb('eventi', { method:'POST', body:JSON.stringify(payload) });
-      evId = res[0].id;
+    if(editId){
+      await sb('eventi?id=eq.'+editId,{method:'PATCH',body:JSON.stringify(payload)});
+      evId=editId;
+      await sb('gruppi_classe?evento_id=eq.'+evId,{method:'DELETE'});
+      await sb('campi?evento_id=eq.'+evId,{method:'DELETE'});
+    }else{
+      var r=await sb('eventi',{method:'POST',body:JSON.stringify(payload)});
+      evId=r[0].id;
     }
-    // Inserisci campi
-    if (campiList.length) {
-      var campiPayload = campiList.map(function(c,i){
-        return { evento_id:evId, nome:'campo_'+i, etichetta:c.etichetta, tipo:c.tipo, obbligatorio:c.obbligatorio, opzioni:c.tipo==='select'?c.opzioni.split(',').map(function(x){return x.trim();}).filter(Boolean):null, ordine:i };
-      });
-      await sb('campi', { method:'POST', body:JSON.stringify(campiPayload) });
+    if(slotAttivi&&gruppi.length){
+      var gp=gruppi.map(function(g,i){return{evento_id:evId,nome:g.nome||('Gruppo '+(i+1)),classi:g.classi,orario_inizio:g.ini,orario_fine:g.fin,durata_slot:g.dur,ordine:i};});
+      await sb('gruppi_classe',{method:'POST',body:JSON.stringify(gp)});
     }
-    toast(editingId ? 'Evento aggiornato!' : 'Evento creato!');
-    resetForm();
-    showPage('eventi');
-  } catch(e) { toast('Errore: '+e.message, false); }
-  btn.textContent = editingId ? 'Aggiorna evento' : 'Salva evento'; btn.disabled = false;
+    if(campi.length){
+      var cp=campi.map(function(c,i){return{evento_id:evId,nome:'campo_'+i,etichetta:c.etichetta,tipo:c.tipo,obbligatorio:c.obbligatorio,opzioni:c.tipo==='select'?c.opzioni.split(',').map(function(x){return x.trim();}).filter(Boolean):null,ordine:i};});
+      await sb('campi',{method:'POST',body:JSON.stringify(cp)});
+    }
+    toast(editId?'Evento aggiornato!':'Evento creato!');
+    resetForm(); showPage('eventi');
+  }catch(e){toast('Errore: '+e.message,false);}
+  btn.textContent=editId?'Aggiorna evento':'Salva evento';btn.disabled=false;
 }
 
-function resetForm() {
-  editingId = null; classiTags = []; campiList = []; campoCounter = 0;
-  document.getElementById('evNome').value = '';
-  document.getElementById('evSlug').value = '';
-  document.getElementById('evData').value = '';
-  document.getElementById('evInizio').value = '16:00';
-  document.getElementById('evFine').value = '19:00';
-  document.getElementById('evDurata').value = '10';
-  document.getElementById('formTitle').textContent = 'Nuovo evento';
-  document.getElementById('saveBtn').textContent = 'Salva evento';
-  renderTags(); renderCampi(); updateSlotPreview();
+function resetForm(){
+  editId=null;gruppi=[];campi=[];gCnt=0;cCnt=0;
+  document.getElementById('eNome').value='';
+  document.getElementById('eSlug').value='';
+  document.getElementById('eData').value='';
+  document.getElementById('eSlotAttivi').checked=true;
+  document.getElementById('gruppiSection').style.display='';
+  document.getElementById('ftitle').textContent='Nuovo evento';
+  document.getElementById('saveBtn').textContent='Salva evento';
+  renderGruppi();renderCampi();
 }
 
-// ── Lista eventi ──────────────────────────────────────────────
-async function loadEventi() {
-  var el = document.getElementById('eventiList');
-  el.innerHTML = '<div class="empty">Caricamento…</div>';
-  try {
-    var q = currentUser.ruolo==='admin' ? 'eventi?order=data_evento.desc&select=*' : 'eventi?utente_id=eq.'+currentUser.id+'&order=data_evento.desc&select=*';
-    var eventi = await sb(q);
-    if (!eventi.length) { el.innerHTML = '<div class="empty">Nessun evento. Creane uno!</div>'; return; }
-    var base = location.origin + location.pathname.replace('backoffice.html','');
-    el.innerHTML = '<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Data</th><th>Orari/Durata</th><th>Classi</th><th>Link form</th><th></th></tr></thead><tbody>' +
-      eventi.map(function(ev) {
-        var url = base + 'form.html?e=' + ev.slug;
-        var cls = ev.classi ? ev.classi.map(function(c){return '<span class="badge badge-class">'+c+'</span>';}).join(' ') : '<span style="color:var(--ink3)">—</span>';
-        return '<tr>' +
-          '<td><strong>'+ev.nome+'</strong></td>' +
-          '<td style="white-space:nowrap">'+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT')+'</td>' +
-          '<td style="font-size:13px;color:var(--ink2)">'+ev.orario_inizio.slice(0,5)+'–'+ev.orario_fine.slice(0,5)+' / '+ev.durata_slot+'min</td>' +
-          '<td>'+cls+'</td>' +
-          '<td><button class="copy-btn" onclick="copyLink(\''+url+'\')">Copia link</button></td>' +
-          '<td><div class="td-actions">' +
-            '<button class="btn btn-sm" onclick="editEvento(\''+ev.id+'\')">Modifica</button>' +
-            '<button class="btn btn-sm btn-danger" onclick="eliminaEvento(\''+ev.id+'\')">Elimina</button>' +
-          '</div></td>' +
+// ── LISTA EVENTI ─────────────────────────────────────────────
+async function loadEventi(){
+  var el=document.getElementById('evList');
+  el.innerHTML='<div class="empty">Caricamento…</div>';
+  try{
+    var q=CU.ruolo==='admin'?'eventi?order=data_evento.desc&select=*':'eventi?utente_id=eq.'+CU.id+'&order=data_evento.desc&select=*';
+    var evs=await sb(q);
+    if(!evs.length){el.innerHTML='<div class="empty">Nessun evento. Creane uno!</div>';return;}
+    var base=location.origin+location.pathname.replace('backoffice.html','');
+    el.innerHTML='<div class="tw-outer"><table><thead><tr><th>Nome</th><th>Data</th><th>Tipo</th><th>Link form</th><th></th></tr></thead><tbody>'+
+      evs.map(function(ev){
+        var url=base+'form.html?e='+ev.slug;
+        var tipo=ev.slot_attivi?'<span style="color:var(--accent);font-size:13px">Con slot orari</span>':'<span style="color:var(--ink2);font-size:13px">Solo dati</span>';
+        return'<tr>'+
+          '<td><strong>'+ev.nome+'</strong></td>'+
+          '<td style="white-space:nowrap">'+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT')+'</td>'+
+          '<td>'+tipo+'</td>'+
+          '<td><div style="display:flex;align-items:center;gap:6px"><span style="font-size:12px;color:var(--accent);font-family:monospace">?e='+ev.slug+'</span><button class="cpb" onclick="copyL(\''+url+'\')">Copia</button></div></td>'+
+          '<td><div class="tda">'+
+            '<button class="btn btn-sm" onclick="editEv(\''+ev.id+'\')">Modifica</button>'+
+            '<button class="btn btn-sm btn-d" onclick="delEv(\''+ev.id+'\')">Elimina</button>'+
+          '</div></td>'+
         '</tr>';
-      }).join('') + '</tbody></table></div>';
-  } catch(e) { el.innerHTML = '<div class="empty" style="color:var(--danger)">Errore: '+e.message+'</div>'; }
+      }).join('')+'</tbody></table></div>';
+  }catch(e){el.innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+e.message+'</div>';}
 }
 
-function copyLink(url) { navigator.clipboard.writeText(url).then(function(){toast('Link copiato!');}); }
+function copyL(url){navigator.clipboard.writeText(url).then(function(){toast('Link copiato!');});}
 
-async function editEvento(id) {
-  try {
-    var ev = (await sb('eventi?id=eq.'+id+'&select=*'))[0];
-    var campi = await sb('campi?evento_id=eq.'+id+'&order=ordine.asc&select=*');
-    editingId = id;
-    document.getElementById('evNome').value = ev.nome;
-    document.getElementById('evSlug').value = ev.slug;
-    document.getElementById('evData').value = ev.data_evento;
-    document.getElementById('evInizio').value = ev.orario_inizio.slice(0,5);
-    document.getElementById('evFine').value = ev.orario_fine.slice(0,5);
-    document.getElementById('evDurata').value = ev.durata_slot;
-    classiTags = ev.classi || [];
-    campiList = []; campoCounter = 0;
-    campi.forEach(function(c){ addCampo({ etichetta:c.etichetta, tipo:c.tipo, obbligatorio:c.obbligatorio, opzioni:c.opzioni||[], dbId:c.id }); });
-    document.getElementById('formTitle').textContent = 'Modifica evento';
-    document.getElementById('saveBtn').textContent = 'Aggiorna evento';
-    renderTags(); updateSlotPreview();
+async function editEv(id){
+  try{
+    var ev=(await sb('eventi?id=eq.'+id+'&select=*'))[0];
+    var gs=await sb('gruppi_classe?evento_id=eq.'+id+'&order=ordine.asc&select=*');
+    var cs=await sb('campi?evento_id=eq.'+id+'&order=ordine.asc&select=*');
+    editId=id;
+    document.getElementById('eNome').value=ev.nome;
+    document.getElementById('eSlug').value=ev.slug;
+    document.getElementById('eData').value=ev.data_evento;
+    document.getElementById('eSlotAttivi').checked=ev.slot_attivi;
+    document.getElementById('gruppiSection').style.display=ev.slot_attivi?'':'none';
+    gruppi=[];gCnt=0;campi=[];cCnt=0;
+    gs.forEach(function(g){addGruppo({nome:g.nome,classi:g.classi,orario_inizio:g.orario_inizio,orario_fine:g.orario_fine,durata_slot:g.durata_slot,dbId:g.id});});
+    cs.forEach(function(c){addCampo({etichetta:c.etichetta,tipo:c.tipo,obbligatorio:c.obbligatorio,opzioni:c.opzioni||[],dbId:c.id});});
+    document.getElementById('ftitle').textContent='Modifica evento';
+    document.getElementById('saveBtn').textContent='Aggiorna evento';
     showPage('nuovo');
-  } catch(e) { toast('Errore: '+e.message, false); }
+  }catch(e){toast('Errore: '+e.message,false);}
 }
 
-async function eliminaEvento(id) {
-  if (!confirm('Eliminare questo evento e tutte le prenotazioni?')) return;
-  try {
-    await sb('campi?evento_id=eq.'+id, { method:'DELETE' });
-    await sb('prenotazioni?evento_id=eq.'+id, { method:'DELETE' });
-    await sb('eventi?id=eq.'+id, { method:'DELETE' });
-    toast('Evento eliminato.'); loadEventi();
-  } catch(e) { toast('Errore: '+e.message, false); }
+async function delEv(id){
+  if(!confirm('Eliminare evento e tutte le prenotazioni?')) return;
+  try{
+    await sb('campi?evento_id=eq.'+id,{method:'DELETE'});
+    await sb('prenotazioni?evento_id=eq.'+id,{method:'DELETE'});
+    await sb('gruppi_classe?evento_id=eq.'+id,{method:'DELETE'});
+    await sb('eventi?id=eq.'+id,{method:'DELETE'});
+    toast('Evento eliminato.');loadEventi();
+  }catch(e){toast('Errore: '+e.message,false);}
 }
 
-// ── Prenotazioni ──────────────────────────────────────────────
-async function initPrenotazioni() {
-  var sel = document.getElementById('prenSel');
-  sel.innerHTML = '<option value="">— scegli —</option>';
-  try {
-    var q = currentUser.ruolo==='admin' ? 'eventi?order=data_evento.desc&select=id,nome,data_evento,orario_inizio,orario_fine,durata_slot,classi' : 'eventi?utente_id=eq.'+currentUser.id+'&order=data_evento.desc&select=id,nome,data_evento,orario_inizio,orario_fine,durata_slot,classi';
-    var eventi = await sb(q);
-    eventi.forEach(function(ev){
-      var opt = document.createElement('option');
-      opt.value = ev.id; opt.textContent = ev.nome+' — '+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT');
-      opt.dataset.ev = JSON.stringify(ev); sel.appendChild(opt);
+// ── PRENOTAZIONI ─────────────────────────────────────────────
+async function initPren(){
+  var sel=document.getElementById('pSel');
+  sel.innerHTML='<option value="">— scegli —</option>';
+  try{
+    var q=CU.ruolo==='admin'?'eventi?order=data_evento.desc&select=*':'eventi?utente_id=eq.'+CU.id+'&order=data_evento.desc&select=*';
+    var evs=await sb(q);
+    evs.forEach(function(ev){
+      var o=document.createElement('option');
+      o.value=ev.id;o.textContent=ev.nome+' — '+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT');
+      o.dataset.ev=JSON.stringify(ev);sel.appendChild(o);
     });
-  } catch(e) {}
+  }catch(e){}
 }
 
-async function loadPrenotazioni() {
-  var sel = document.getElementById('prenSel');
-  if (!sel.value) { document.getElementById('prenList').innerHTML='<div class="empty">Seleziona un evento.</div>'; document.getElementById('statsRow').style.display='none'; document.getElementById('exportBar').style.display='none'; return; }
-  var opt = sel.options[sel.selectedIndex];
-  currentEvento = JSON.parse(opt.dataset.ev);
-  document.getElementById('prenList').innerHTML = '<div class="empty">Caricamento…</div>';
-  try {
-    var campi = await sb('campi?evento_id=eq.'+currentEvento.id+'&order=ordine.asc&select=*');
-    var pren = await sb('prenotazioni?evento_id=eq.'+currentEvento.id+'&order=orario.asc&select=*');
-    currentPrenotazioni = pren;
-    var campiExtra = campi;
-    var slots = generateSlots(currentEvento.orario_inizio.slice(0,5), currentEvento.orario_fine.slice(0,5), currentEvento.durata_slot);
-    document.getElementById('statTot').textContent = slots.length;
-    document.getElementById('statPren').textContent = pren.length;
-    document.getElementById('statLiberi').textContent = slots.length - pren.length;
-    document.getElementById('statsRow').style.display = 'grid';
-    document.getElementById('exportBar').style.display = 'flex';
-    if (!pren.length) { document.getElementById('prenList').innerHTML='<div class="empty">Nessuna prenotazione ancora.</div>'; return; }
-    renderPrenTable(pren, campiExtra);
-  } catch(e) { document.getElementById('prenList').innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+e.message+'</div>'; }
+async function loadPren(){
+  var sel=document.getElementById('pSel');
+  if(!sel.value){document.getElementById('prenList').innerHTML='<div class="empty">Seleziona un evento.</div>';document.getElementById('statsRow').style.display='none';document.getElementById('expBar').style.display='none';return;}
+  curEv=JSON.parse(sel.options[sel.selectedIndex].dataset.ev);
+  document.getElementById('prenList').innerHTML='<div class="empty">Caricamento…</div>';
+  try{
+    var gs=await sb('gruppi_classe?evento_id=eq.'+curEv.id+'&order=ordine.asc&select=*');
+    var cs=await sb('campi?evento_id=eq.'+curEv.id+'&order=ordine.asc&select=*');
+    var pr=await sb('prenotazioni?evento_id=eq.'+curEv.id+'&order=orario.asc&select=*');
+    curPren=pr;
+    var totSlot=0;
+    gs.forEach(function(g){totSlot+=genSlots(g.orario_inizio.slice(0,5),g.orario_fine.slice(0,5),g.durata_slot).length;});
+    document.getElementById('stTot').textContent=curEv.slot_attivi?totSlot:'—';
+    document.getElementById('stPren').textContent=pr.length;
+    document.getElementById('stLib').textContent=curEv.slot_attivi?(totSlot-pr.length):'—';
+    document.getElementById('statsRow').style.display='grid';
+    document.getElementById('expBar').style.display='flex';
+    if(!pr.length){document.getElementById('prenList').innerHTML='<div class="empty">Nessuna prenotazione ancora.</div>';return;}
+    renderPrenTable(pr,cs,gs);
+  }catch(e){document.getElementById('prenList').innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+e.message+'</div>';}
 }
 
-function renderPrenTable(pren, campiExtra) {
-  var hasCl = currentEvento.classi && currentEvento.classi.length;
-  var sorted = pren.slice().sort(function(a,b){
-    var va = sortCol==='created_at' ? new Date(a.created_at) : (a[sortCol]||'');
-    var vb = sortCol==='created_at' ? new Date(b.created_at) : (b[sortCol]||'');
-    if (va < vb) return -sortDir; if (va > vb) return sortDir; return 0;
+function renderPrenTable(pr,cs,gs){
+  var gMap={};gs.forEach(function(g){gMap[g.id]=g;});
+  var hasCl=gs.length>0;
+  var sorted=pr.slice().sort(function(a,b){
+    var va=sortCol==='created_at'?new Date(a.created_at):(a[sortCol]||'');
+    var vb=sortCol==='created_at'?new Date(b.created_at):(b[sortCol]||'');
+    if(va<vb) return-sortDir;if(va>vb) return sortDir;return 0;
   });
-  var cols = ['orario','cognome','nome'];
-  if (hasCl) cols.push('classe');
-  campiExtra.forEach(function(c){ cols.push('extra:'+c.nome+':'+c.etichetta); });
+  var cols=['orario','classe','cognome','nome'];
+  cs.forEach(function(c){cols.push('x:'+c.nome+':'+c.etichetta);});
   cols.push('created_at');
-  var thead = cols.map(function(c){
-    var key = c.startsWith('extra:') ? c.split(':')[1] : c;
-    var label = c==='orario'?'Orario':c==='cognome'?'Cognome':c==='nome'?'Nome':c==='classe'?'Classe':c==='created_at'?'Registrato il':c.split(':')[2];
-    var isSorted = sortCol===key;
-    return '<th onclick="setSort(\''+key+'\')" class="'+(isSorted?'sorted':'')+'">'+label+'<span class="sort-icon">'+(isSorted?(sortDir>0?'↑':'↓'):'↕')+'</span></th>';
-  }).join('') + '<th></th>';
-  var tbody = sorted.map(function(p){
-    var tds = cols.map(function(c){
-      if (c==='created_at') return '<td style="font-size:12px;color:var(--ink2)">'+new Date(p.created_at).toLocaleString('it-IT')+'</td>';
-      if (c.startsWith('extra:')) { var k=c.split(':')[1]; return '<td>'+(p.dati_extra&&p.dati_extra[k]!==undefined?escHtml(String(p.dati_extra[k])):'—')+'</td>'; }
-      return '<td>'+escHtml(String(p[c]||''))+'</td>';
+  if(!curEv.slot_attivi) cols=cols.filter(function(c){return c!=='orario';});
+
+  var thead=cols.map(function(c){
+    var key=c.startsWith('x:')?c.split(':')[1]:c;
+    var lbl={'orario':'Orario','classe':'Classe','cognome':'Cognome','nome':'Nome','created_at':'Registrato il'}[key]||(c.startsWith('x:')?c.split(':')[2]:key);
+    var is=sortCol===key;
+    return'<th onclick="setSort(\''+key+'\')" class="'+(is?'sorted':'')+'">'+lbl+'<span class="si">'+(is?(sortDir>0?'↑':'↓'):'↕')+'</span></th>';
+  }).join('')+'<th></th>';
+
+  var tbody=sorted.map(function(p){
+    var g=p.gruppo_id?gMap[p.gruppo_id]:null;
+    var tds=cols.map(function(c){
+      if(c==='created_at') return'<td style="font-size:12px;color:var(--ink2)">'+new Date(p.created_at).toLocaleString('it-IT')+'</td>';
+      if(c.startsWith('x:')){var k=c.split(':')[1];return'<td>'+(p.dati_extra&&p.dati_extra[k]!==undefined?escH(String(p.dati_extra[k])):'—')+'</td>';}
+      return'<td>'+escH(String(p[c]||''))+'</td>';
     }).join('');
-    return '<tr>'+tds+'<td><button class="btn btn-sm btn-danger" onclick="eliminaPren(\''+p.id+'\')">Elimina</button></td></tr>';
+    return'<tr>'+tds+'<td><button class="btn btn-sm btn-d" onclick="delPren(\''+p.id+'\')">Elimina</button></td></tr>';
   }).join('');
-  document.getElementById('prenList').innerHTML = '<div class="tbl-wrap"><table><thead><tr>'+thead+'</tr></thead><tbody>'+tbody+'</tbody></table></div>';
+  document.getElementById('prenList').innerHTML='<div class="tw-outer"><table><thead><tr>'+thead+'</tr></thead><tbody>'+tbody+'</tbody></table></div>';
 }
 
-function setSort(col) {
-  if (sortCol===col) sortDir*=-1; else { sortCol=col; sortDir=1; }
-  if (currentPrenotazioni.length) {
-    var sel = document.getElementById('prenSel');
-    var opt = sel.options[sel.selectedIndex];
-    var ev = JSON.parse(opt.dataset.ev);
-    sb('campi?evento_id=eq.'+ev.id+'&order=ordine.asc&select=*').then(function(campi){ renderPrenTable(currentPrenotazioni, campi); });
+function setSort(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  if(curPren.length){
+    var sel=document.getElementById('pSel');var ev=JSON.parse(sel.options[sel.selectedIndex].dataset.ev);
+    Promise.all([sb('campi?evento_id=eq.'+ev.id+'&order=ordine.asc&select=*'),sb('gruppi_classe?evento_id=eq.'+ev.id+'&order=ordine.asc&select=*')]).then(function(r){renderPrenTable(curPren,r[0],r[1]);});
   }
 }
 
-async function eliminaPren(id) {
-  if (!confirm('Eliminare questa prenotazione?')) return;
-  try { await sb('prenotazioni?id=eq.'+id, {method:'DELETE'}); toast('Eliminata.'); loadPrenotazioni(); }
-  catch(e) { toast('Errore: '+e.message, false); }
+async function delPren(id){
+  if(!confirm('Eliminare questa prenotazione?')) return;
+  try{await sb('prenotazioni?id=eq.'+id,{method:'DELETE'});toast('Eliminata.');loadPren();}
+  catch(e){toast('Errore: '+e.message,false);}
 }
 
-function exportExcel() {
-  if (!currentPrenotazioni.length) { toast('Nessuna prenotazione.', false); return; }
-  var hasCl = currentEvento.classi && currentEvento.classi.length;
-  sb('campi?evento_id=eq.'+currentEvento.id+'&order=ordine.asc&select=*').then(function(campi){
-    var headers = ['Orario','Cognome','Nome'];
-    if (hasCl) headers.push('Classe');
-    campi.forEach(function(c){ headers.push(c.etichetta); });
-    headers.push('Registrato il');
-    var rows = [headers];
-    var sorted = currentPrenotazioni.slice().sort(function(a,b){ return a.orario<b.orario?-1:a.orario>b.orario?1:0; });
+function exportXL(){
+  if(!curPren.length){toast('Nessuna prenotazione.',false);return;}
+  Promise.all([sb('campi?evento_id=eq.'+curEv.id+'&order=ordine.asc&select=*'),sb('gruppi_classe?evento_id=eq.'+curEv.id+'&order=ordine.asc&select=*')]).then(function(r){
+    var cs=r[0];
+    var hdrs=curEv.slot_attivi?['Orario','Classe','Cognome','Nome']:['Classe','Cognome','Nome'];
+    cs.forEach(function(c){hdrs.push(c.etichetta);});
+    hdrs.push('Registrato il');
+    var rows=[hdrs];
+    var sorted=curPren.slice().sort(function(a,b){return(a.orario||'')>(b.orario||'')?1:(a.orario||'')<(b.orario||'')?-1:0;});
     sorted.forEach(function(p){
-      var row = [p.orario, p.cognome, p.nome];
-      if (hasCl) row.push(p.classe||'');
-      campi.forEach(function(c){ row.push(p.dati_extra&&p.dati_extra[c.nome]!==undefined ? p.dati_extra[c.nome] : ''); });
+      var row=curEv.slot_attivi?[p.orario,p.classe,p.cognome,p.nome]:[p.classe,p.cognome,p.nome];
+      cs.forEach(function(c){row.push(p.dati_extra&&p.dati_extra[c.nome]!==undefined?p.dati_extra[c.nome]:'');});
       row.push(new Date(p.created_at).toLocaleString('it-IT'));
       rows.push(row);
     });
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet(rows);
-    var colw = headers.map(function(){ return {wch:18}; });
-    colw[0]={wch:8}; ws['!cols']=colw;
-    XLSX.utils.book_append_sheet(wb, ws, 'Prenotazioni');
-    XLSX.writeFile(wb, (currentEvento.nome.replace(/\s+/g,'_'))+'.xlsx');
+    var wb=XLSX.utils.book_new();
+    var ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=hdrs.map(function(){return{wch:16};});
+    XLSX.utils.book_append_sheet(wb,ws,'Prenotazioni');
+    XLSX.writeFile(wb,(curEv.nome.replace(/\s+/g,'_'))+'.xlsx');
   });
 }
 
-// ── Utenti ────────────────────────────────────────────────────
-async function loadUtenti() {
-  var el = document.getElementById('utentiList');
-  try {
-    var utenti = await sb('utenti?order=created_at.asc&select=*');
-    if (!utenti.length) { el.innerHTML='<div class="empty">Nessun utente.</div>'; return; }
-    el.innerHTML = '<table><thead><tr><th>Username</th><th>Ruolo</th><th>Creato il</th><th></th></tr></thead><tbody>' +
-      utenti.map(function(u){
-        return '<tr><td><strong>'+u.username+'</strong></td>' +
-          '<td><span class="badge '+(u.ruolo==='admin'?'badge-admin':'badge-user')+'">'+u.ruolo+'</span></td>' +
-          '<td style="font-size:12px;color:var(--ink2)">'+new Date(u.created_at).toLocaleDateString('it-IT')+'</td>' +
-          '<td>'+(u.id!==currentUser.id?'<button class="btn btn-sm btn-danger" onclick="eliminaUtente(\''+u.id+'\')">Elimina</button>':'')+'</td></tr>';
-      }).join('') + '</tbody></table>';
-  } catch(e) { el.innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+e.message+'</div>'; }
+// ── UTENTI ───────────────────────────────────────────────────
+async function loadUsers(){
+  var el=document.getElementById('userList');
+  try{
+    var us=await sb('utenti?order=created_at.asc&select=*');
+    el.innerHTML='<table><thead><tr><th>Username</th><th>Ruolo</th><th>Creato il</th><th></th></tr></thead><tbody>'+
+      us.map(function(u){
+        return'<tr><td><strong>'+u.username+'</strong></td>'+
+          '<td><span class="badge '+(u.ruolo==='admin'?'ba':'bu')+'">'+u.ruolo+'</span></td>'+
+          '<td style="font-size:12px;color:var(--ink2)">'+new Date(u.created_at).toLocaleDateString('it-IT')+'</td>'+
+          '<td>'+(u.id!==CU.id?'<button class="btn btn-sm btn-d" onclick="delUser(\''+u.id+'\')">Elimina</button>':'')+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }catch(e){el.innerHTML='<div class="empty" style="color:var(--danger)">Errore</div>';}
 }
 
-async function aggiungiUtente() {
-  var u = document.getElementById('nuovoUsername').value.trim();
-  var p = document.getElementById('nuovoPassword').value.trim();
-  var r = document.getElementById('nuovoRuolo').value;
-  if (!u||!p) { toast('Compila username e password.', false); return; }
-  try {
-    await sb('utenti', { method:'POST', body:JSON.stringify({ username:u, password:p, ruolo:r }) });
-    toast('Utente aggiunto!');
-    document.getElementById('nuovoUsername').value=''; document.getElementById('nuovoPassword').value='';
-    loadUtenti();
-  } catch(e) { toast('Errore (username già esistente?): '+e.message, false); }
+async function addUser(){
+  var u=document.getElementById('nUser').value.trim(),p=document.getElementById('nPass').value.trim(),r=document.getElementById('nRuolo').value;
+  if(!u||!p){toast('Compila username e password.',false);return;}
+  try{await sb('utenti',{method:'POST',body:JSON.stringify({username:u,password:p,ruolo:r})});toast('Utente aggiunto!');document.getElementById('nUser').value='';document.getElementById('nPass').value='';loadUsers();}
+  catch(e){toast('Errore (username già esistente?)',false);}
 }
-
-async function eliminaUtente(id) {
-  if (!confirm('Eliminare questo utente e tutti i suoi eventi?')) return;
-  try {
-    var eventi = await sb('eventi?utente_id=eq.'+id+'&select=id');
-    for (var i=0;i<eventi.length;i++) {
-      await sb('prenotazioni?evento_id=eq.'+eventi[i].id, {method:'DELETE'});
-      await sb('campi?evento_id=eq.'+eventi[i].id, {method:'DELETE'});
+async function delUser(id){
+  if(!confirm('Eliminare utente e tutti i suoi dati?')) return;
+  try{
+    var evs=await sb('eventi?utente_id=eq.'+id+'&select=id');
+    for(var i=0;i<evs.length;i++){
+      await sb('prenotazioni?evento_id=eq.'+evs[i].id,{method:'DELETE'});
+      await sb('campi?evento_id=eq.'+evs[i].id,{method:'DELETE'});
+      await sb('gruppi_classe?evento_id=eq.'+evs[i].id,{method:'DELETE'});
     }
-    await sb('eventi?utente_id=eq.'+id, {method:'DELETE'});
-    await sb('utenti?id=eq.'+id, {method:'DELETE'});
-    toast('Utente eliminato.'); loadUtenti();
-  } catch(e) { toast('Errore: '+e.message, false); }
+    await sb('eventi?utente_id=eq.'+id,{method:'DELETE'});
+    await sb('utenti?id=eq.'+id,{method:'DELETE'});
+    toast('Utente eliminato.');loadUsers();
+  }catch(e){toast('Errore: '+e.message,false);}
 }
 </script>
 </body>

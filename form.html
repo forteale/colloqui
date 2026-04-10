@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Prenotazione colloquio</title>
+<title>Prenotazione</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#F7F4EE;--card:#FFFEFB;--ink:#1C1A17;--ink2:#6B6560;--ink3:#A09A93;--accent:#2D5016;--accent-light:#EAF0E2;--border:#E2DDD6;--danger:#8B2E2E;--danger-light:#F5EAEA;--warn:#7A5200;--warn-light:#FFF8E6;--warn-border:#F0D890;}
-body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;padding:2rem 1rem 4rem;}
-.container{max-width:520px;margin:0 auto;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;padding:2rem 1rem 0;min-height:100vh;display:flex;flex-direction:column;}
+.container{max-width:520px;margin:0 auto;width:100%;flex:1;}
 header{margin-bottom:2rem;}
 .eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
 h1{font-family:'Fraunces',serif;font-weight:300;font-size:32px;line-height:1.2;}
@@ -23,12 +23,12 @@ label{display:block;font-size:13px;font-weight:500;color:var(--ink2);margin-bott
 label .req{color:var(--danger);margin-left:2px;}
 input[type=text],input[type=number],input[type=email],input[type=tel],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .15s;appearance:none;-webkit-appearance:none;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
-.select-wrap{position:relative;}
-.select-wrap::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--ink3);pointer-events:none;}
+.sw{position:relative;}
+.sw::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--ink3);pointer-events:none;}
 .checkbox-field{display:flex;align-items:center;gap:10px;padding:10px 0;}
-.checkbox-field input[type=checkbox]{width:20px;height:20px;border-radius:4px;border:1px solid var(--border);background:var(--bg);cursor:pointer;accent-color:var(--accent);}
+.checkbox-field input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;}
 .checkbox-field label{margin:0;font-size:15px;color:var(--ink);cursor:pointer;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
 .modify-banner{display:none;background:var(--warn-light);border:1px solid var(--warn-border);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--warn);line-height:1.5;margin-bottom:1.25rem;}
 .modify-banner.show{display:block;}
 .modify-banner strong{font-weight:500;}
@@ -63,12 +63,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 .new-booking-btn{margin-top:1.25rem;padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;}
 .error-page{text-align:center;padding:4rem 1rem;}
 .error-page h2{font-family:'Fraunces',serif;font-weight:300;font-size:28px;margin-bottom:8px;}
-.error-page p{color:var(--ink2);font-size:14px;}
+.error-page p{color:var(--ink2);}
+/* footer */
+footer{max-width:520px;margin:2rem auto 0;padding:1.5rem 1rem;border-top:1px solid var(--border);text-align:center;}
+footer p{font-size:12px;color:var(--ink3);line-height:1.7;}
+footer a{color:var(--ink2);text-decoration:none;}
+footer a:hover{color:var(--accent);}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
 @media(max-width:600px){
-  body{padding:1.25rem .875rem 4rem;}h1{font-size:24px;}.card{padding:1.25rem 1rem;}
-  .row2{grid-template-columns:1fr;gap:0;margin-bottom:0;}.row2 .field{margin-bottom:1rem;}
+  body{padding:1.25rem .875rem 0;}h1{font-size:24px;}.card{padding:1.25rem 1rem;}
+  .r2{grid-template-columns:1fr;gap:0;margin-bottom:0;}.r2 .field{margin-bottom:1rem;}
   .slots-grid{grid-template-columns:repeat(4,1fr);gap:6px;}.slot-btn{height:46px;font-size:13px;}
 }
 @media(max-width:380px){.slots-grid{grid-template-columns:repeat(3,1fr);gap:5px;}.slot-btn{height:44px;font-size:12px;}}
@@ -78,63 +83,67 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 <div class="container" id="root">
   <div class="slots-loading" style="padding:4rem;text-align:center">Caricamento…</div>
 </div>
+<footer>
+  <p>Realizzato da <strong>Forte Alessandro</strong> · <a href="mailto:forteale84@gmail.com">forteale84@gmail.com</a><br>
+  I dati inseriti saranno utilizzati esclusivamente per la finalità della presente registrazione.</p>
+</footer>
+
 <script>
-const SB_URL='https://axhstwruvwpxvastlszg.supabase.co';
-const SB_KEY='sb_publishable_oer2FV7QhDkZFG6bKZtp1g_KxJxrXmE';
-var evento=null, campiExtra=[], selectedSlot=null, currentSlot=null, isModify=false, slotsLoaded=false, debounceTimer=null;
+const SB='https://axhstwruvwpxvastlszg.supabase.co';
+const KEY='sb_publishable_oer2FV7QhDkZFG6bKZtp1g_KxJxrXmE';
+var evento=null, gruppi=[], campiExtra=[], curGruppo=null;
+var selectedSlot=null, currentSlot=null, isModify=false, slotsLoaded=false, debounceTimer=null;
 
-async function sb(path, opts) {
-  var res = await fetch(SB_URL+'/rest/v1/'+path, Object.assign({ headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'} }, opts||{}));
-  if (!res.ok) throw new Error(await res.text());
-  var ct=res.headers.get('content-type')||''; return ct.includes('json')?res.json():res.text();
+async function sb(path,opts){
+  var r=await fetch(SB+'/rest/v1/'+path,Object.assign({headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=representation'}},opts||{}));
+  if(!r.ok) throw new Error(await r.text());
+  var ct=r.headers.get('content-type')||''; return ct.includes('json')?r.json():r.text();
 }
 
-function generateSlots(ini,fin,dur){
-  var slots=[],p=ini.split(':'),h=+p[0],m=+p[1],fp=fin.split(':'),fmin=+fp[0]*60+ +fp[1];
-  while(h*60+m<fmin&&slots.length<300){slots.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);m+=dur;if(m>=60){m-=60;h++;}}
-  return slots;
+function genSlots(ini,fin,dur){
+  var s=[],p=ini.split(':'),h=+p[0],m=+p[1],fp=fin.split(':'),fm=+fp[0]*60+ +fp[1];
+  while(h*60+m<fm&&s.length<300){s.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);m+=dur;if(m>=60){m-=60;h++;}}
+  return s;
 }
 
-async function init() {
+async function init(){
   var params=new URLSearchParams(location.search);
   var slug=params.get('e');
-  if (!slug) { showErr('Link non valido.'); return; }
-  try {
+  if(!slug){showErr('Link non valido.');return;}
+  try{
     var evs=await sb('eventi?slug=eq.'+encodeURIComponent(slug)+'&select=*');
-    if (!evs.length) { showErr('Evento non trovato o link scaduto.'); return; }
+    if(!evs.length){showErr('Evento non trovato o link scaduto.');return;}
     evento=evs[0];
+    var gs=await sb('gruppi_classe?evento_id=eq.'+evento.id+'&order=ordine.asc&select=*');
+    gruppi=gs;
     campiExtra=await sb('campi?evento_id=eq.'+evento.id+'&order=ordine.asc&select=*');
     render();
-  } catch(e) { showErr('Errore di connessione: '+e.message); }
+  }catch(e){showErr('Errore di connessione: '+e.message);}
 }
 
-function showErr(msg) {
+function showErr(msg){
   document.getElementById('root').innerHTML='<div class="error-page"><h2>Oops</h2><p>'+msg+'</p></div>';
 }
 
-function render() {
+function render(){
   var dataFmt=new Date(evento.data_evento+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  var hasCl=evento.classi&&evento.classi.length;
-  var classeHtml=hasCl?'<div class="field"><label for="f_classe">Classe <span class="req">*</span></label><div class="select-wrap"><select id="f_classe" onchange="chk()"><option value="">— Seleziona —</option>'+evento.classi.map(function(c){return'<option>'+c+'</option>';}).join('')+'</select></div></div>':'';
+
+  // Tutte le classi disponibili da tutti i gruppi
+  var tutteClassi=[];
+  gruppi.forEach(function(g){g.classi.forEach(function(c){if(!tutteClassi.includes(c))tutteClassi.push(c);});});
+  var hasClassi=tutteClassi.length>0;
+  var slotAttivi=evento.slot_attivi;
+
+  var classeHtml=hasClassi
+    ?'<div class="field"><label for="f_classe">Classe <span class="req">*</span></label><div class="sw"><select id="f_classe" onchange="onClasseChange()"><option value="">— Seleziona —</option>'+tutteClassi.map(function(c){return'<option>'+c+'</option>';}).join('')+'</select></div></div>'
+    :'';
+
   var extraHtml=campiExtra.map(function(c){return renderCampo(c);}).join('');
-  document.getElementById('root').innerHTML=
-    '<header><div class="eyebrow">Prenotazione colloquio · a.s. 2025/26</div>'+
-    '<h1><em>'+evento.nome+'</em></h1>'+
-    '<div style="font-size:13px;color:var(--ink2);margin-top:6px">'+dataFmt+'</div>'+
-    '<div class="header-line"></div></header>'+
-    '<div id="mainForm">'+
-      '<div id="msgError" class="msg msg-error"></div>'+
-      '<div id="modifyBanner" class="modify-banner"></div>'+
-      '<div class="card">'+
-        '<div class="section-label">Dati alunno</div>'+
-        '<div class="row2">'+
-          '<div class="field"><label for="f_cognome">Cognome <span class="req">*</span></label><input type="text" id="f_cognome" placeholder="Rossi" autocomplete="off" oninput="onCognomeInput()"/></div>'+
-          '<div class="field"><label for="f_nome">Nome <span class="req">*</span></label><input type="text" id="f_nome" placeholder="Luca" autocomplete="off" oninput="chk()"/></div>'+
-        '</div>'+classeHtml+extraHtml+
-      '</div>'+
-      '<div class="card">'+
+
+  var slotSection=slotAttivi
+    ?'<div class="card">'+
         '<div class="section-label">Scegli l\'orario</div>'+
-        '<p class="slots-intro">Seleziona un orario disponibile. Ogni colloquio dura '+evento.durata_slot+' minuti. Gli orari barrati sono già occupati.</p>'+
+        '<p class="slots-intro" id="slotIntro">Seleziona un orario disponibile. Gli orari barrati sono già occupati.</p>'+
         '<div id="slotsContainer" class="slots-loading">Inserisci il cognome per caricare gli orari…</div>'+
         '<div class="free-count" id="freeCount"></div>'+
         '<div class="slot-legend" id="slotLegend" style="display:none">'+
@@ -142,67 +151,133 @@ function render() {
           '<div class="legend-item"><div class="legend-dot" style="background:var(--accent-light);border:2px solid var(--accent)"></div><span>Tuo orario attuale</span></div>'+
           '<div class="legend-item"><div class="legend-dot" style="background:#EDEBE6"></div><span>Occupato</span></div>'+
         '</div>'+
+      '</div>'
+    :'';
+
+  document.getElementById('root').innerHTML=
+    '<header><div class="eyebrow">Prenotazione · a.s. 2025/26</div>'+
+    '<h1><em>'+evento.nome+'</em></h1>'+
+    '<div style="font-size:13px;color:var(--ink2);margin-top:6px">'+dataFmt+'</div>'+
+    '<div class="header-line"></div></header>'+
+    '<div id="mainForm">'+
+      '<div id="msgError" class="msg msg-error"></div>'+
+      '<div id="modifyBanner" class="modify-banner"></div>'+
+      '<div class="card">'+
+        '<div class="section-label">Dati</div>'+
+        '<div class="r2">'+
+          '<div class="field"><label for="f_cognome">Cognome <span class="req">*</span></label><input type="text" id="f_cognome" placeholder="Rossi" autocomplete="off" oninput="onCognomeInput()"/></div>'+
+          '<div class="field"><label for="f_nome">Nome <span class="req">*</span></label><input type="text" id="f_nome" placeholder="Luca" autocomplete="off" oninput="chk()"/></div>'+
+        '</div>'+classeHtml+extraHtml+
       '</div>'+
-      '<button class="submit-btn" id="submitBtn" disabled onclick="submit()">Conferma prenotazione</button>'+
+      slotSection+
+      '<button class="submit-btn" id="submitBtn" disabled onclick="doSubmit()">Conferma</button>'+
     '</div>'+
     '<div id="successScreen" class="success-screen">'+
       '<div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>'+
-      '<h2 id="succTitle">Prenotazione confermata</h2><p id="succSub">Il tuo orario è stato registrato con successo.</p>'+
-      '<div class="booking-summary" id="succSummary"></div>'+
+      '<h2 id="succTitle">Registrazione confermata</h2><p id="succSub">I tuoi dati sono stati registrati con successo.</p>'+
+      '<div class="booking-summary" id="succSum"></div>'+
       '<button class="new-booking-btn" onclick="resetForm()">Registra un altro alunno</button>'+
     '</div>';
 }
 
-function renderCampo(c) {
+function renderCampo(c){
   var req='<span class="req">*</span>';
   var lbl='<label for="f_'+c.nome+'">'+c.etichetta+(c.obbligatorio?' '+req:'')+'</label>';
-  if (c.tipo==='checkbox') return '<div class="checkbox-field"><input type="checkbox" id="f_'+c.nome+'" onchange="chk()"/><label for="f_'+c.nome+'">'+c.etichetta+'</label></div>';
-  if (c.tipo==='select') return '<div class="field">'+lbl+'<div class="select-wrap"><select id="f_'+c.nome+'" onchange="chk()"><option value="">— Seleziona —</option>'+(c.opzioni||[]).map(function(o){return'<option>'+o+'</option>';}).join('')+'</select></div></div>';
-  var t=c.tipo==='numero'?'number':c.tipo==='email'?'email':c.tipo==='telefono'?'tel':c.tipo==='data'?'date':'text';
-  return '<div class="field">'+lbl+'<input type="'+t+'" id="f_'+c.nome+'" oninput="chk()"/></div>';
+  if(c.tipo==='checkbox') return'<div class="checkbox-field"><input type="checkbox" id="f_'+c.nome+'" onchange="chk()"/><label for="f_'+c.nome+'">'+c.etichetta+(c.obbligatorio?' '+req:'')+'</label></div>';
+  if(c.tipo==='select') return'<div class="field">'+lbl+'<div class="sw"><select id="f_'+c.nome+'" onchange="chk()"><option value="">— Seleziona —</option>'+(c.opzioni||[]).map(function(o){return'<option>'+o+'</option>';}).join('')+'</select></div></div>';
+  var t={numero:'number',email:'email',telefono:'tel',data:'date'}[c.tipo]||'text';
+  return'<div class="field">'+lbl+'<input type="'+t+'" id="f_'+c.nome+'" oninput="chk()"/></div>';
 }
 
-function onCognomeInput() {
-  clearTimeout(debounceTimer); selectedSlot=null; currentSlot=null; isModify=false; slotsLoaded=false;
-  var sc=document.getElementById('slotsContainer'); if(sc) sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Caricamento…</div>';
-  var fc=document.getElementById('freeCount'); if(fc) fc.textContent='';
-  var mb=document.getElementById('modifyBanner'); if(mb) mb.classList.remove('show');
-  var sl=document.getElementById('slotLegend'); if(sl) sl.style.display='none';
+// Quando cambia la classe, aggiorna il gruppo corrente e ricarica gli slot
+function onClasseChange(){
+  selectedSlot=null; currentSlot=null; isModify=false; slotsLoaded=false;
+  resetSlotUI();
+  var classe=getVal('f_classe');
+  curGruppo=null;
+  if(classe){
+    gruppi.forEach(function(g){if(g.classi.includes(classe)) curGruppo=g;});
+    if(curGruppo){
+      var dur=curGruppo.durata_slot;
+      var si=document.getElementById('slotIntro');
+      if(si) si.textContent='Seleziona un orario disponibile. Ogni colloquio dura '+dur+' minuti. Gli orari barrati sono già occupati.';
+    }
+    var cognome=getVal('f_cognome');
+    if(cognome&&cognome.length>=2) loadSlots(cognome,classe);
+    else{var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';}
+  }
   chk();
-  var v=document.getElementById('f_cognome').value.trim();
-  if (v.length>=2) debounceTimer=setTimeout(function(){loadSlots(v);},500);
-  else if(sc) sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';
 }
 
-async function loadSlots(cognome) {
-  try {
-    var pren=await sb('prenotazioni?evento_id=eq.'+evento.id+'&select=orario,cognome,nome,classe,dati_extra');
-    var bySlot={},byCognome={};
-    pren.forEach(function(p){bySlot[p.orario]=p;byCognome[p.cognome.toLowerCase()]=p;});
-    var ex=byCognome[cognome.toLowerCase()]||null;
-    var all=generateSlots(evento.orario_inizio.slice(0,5),evento.orario_fine.slice(0,5),evento.durata_slot);
+function resetSlotUI(){
+  var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Caricamento…</div>';
+  var fc=document.getElementById('freeCount');if(fc)fc.textContent='';
+  var mb=document.getElementById('modifyBanner');if(mb)mb.classList.remove('show');
+  var sl=document.getElementById('slotLegend');if(sl)sl.style.display='none';
+}
+
+function onCognomeInput(){
+  clearTimeout(debounceTimer);
+  selectedSlot=null; currentSlot=null; isModify=false; slotsLoaded=false;
+  resetSlotUI(); chk();
+  var cognome=getVal('f_cognome');
+  var classe=getVal('f_classe');
+  if(cognome.length>=2&&(!gruppi.length||classe)){
+    debounceTimer=setTimeout(function(){loadSlots(cognome,classe);},500);
+  }else{
+    var sc=document.getElementById('slotsContainer');
+    if(sc) sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">'+(gruppi.length&&!classe?'Seleziona prima la classe…':'Inserisci il cognome per caricare gli orari…')+'</div>';
+  }
+}
+
+async function loadSlots(cognome,classe){
+  if(!evento.slot_attivi) return;
+  // Trova il gruppo per questa classe
+  var g=null;
+  if(gruppi.length){
+    gruppi.forEach(function(gr){if(!classe||gr.classi.includes(classe)) g=gr;});
+  }
+  if(!g&&gruppi.length){var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Nessun gruppo per questa classe.</div>';return;}
+  curGruppo=g;
+  try{
+    // Carica prenotazioni del gruppo (o dell'evento se no gruppi)
+    var q=g?'prenotazioni?evento_id=eq.'+evento.id+'&gruppo_id=eq.'+g.id+'&select=orario,cognome,nome,classe,dati_extra'
+           :'prenotazioni?evento_id=eq.'+evento.id+'&select=orario,cognome,nome,classe,dati_extra';
+    var pren=await sb(q);
+    var bySlot={},byCognomeClasse={};
+    pren.forEach(function(p){
+      bySlot[p.orario]=p;
+      // chiave: cognome+classe per gestire fratelli
+      var chiave=(p.cognome||'').toLowerCase()+'|'+(p.classe||'').toLowerCase();
+      byCognomeClasse[chiave]=p;
+    });
+    var chiaveRicerca=(cognome||'').toLowerCase()+'|'+(classe||'').toLowerCase();
+    var ex=byCognomeClasse[chiaveRicerca]||null;
+    var ini=g?g.orario_inizio.slice(0,5):'08:00';
+    var fin=g?g.orario_fine.slice(0,5):'20:00';
+    var dur=g?g.durata_slot:10;
+    var all=genSlots(ini,fin,dur);
     onSlotsLoaded({slots:all.map(function(s){return{time:s,taken:!!bySlot[s]};}),existing:ex?{cognome:ex.cognome,nome:ex.nome,classe:ex.classe,orario:ex.orario,dati_extra:ex.dati_extra}:null});
-  } catch(e) { showErrInline('Errore di connessione. Ricarica la pagina.'); }
+  }catch(e){showErrInline('Errore di connessione. Ricarica la pagina.');}
 }
 
-function onSlotsLoaded(data) {
+function onSlotsLoaded(data){
   slotsLoaded=true;
   var ex=data.existing;
-  if (ex) {
-    isModify=true; currentSlot=ex.orario;
-    var fn=document.getElementById('f_nome'); if(fn) fn.value=ex.nome;
-    var fc=document.getElementById('f_classe'); if(fc&&ex.classe) fc.value=ex.classe;
-    if (ex.dati_extra) campiExtra.forEach(function(c){ var el=document.getElementById('f_'+c.nome); if(!el) return; if(c.tipo==='checkbox') el.checked=!!ex.dati_extra[c.nome]; else if(ex.dati_extra[c.nome]!==undefined) el.value=ex.dati_extra[c.nome]; });
-    var banner=document.getElementById('modifyBanner');
-    banner.innerHTML='⚠️ <strong>'+ex.cognome+' '+ex.nome+'</strong> è già registrato alle <strong>'+ex.orario+'</strong>.<br>Seleziona un nuovo orario per modificare la prenotazione.';
-    banner.classList.add('show');
-    document.getElementById('slotLegend').style.display='flex';
-  } else { isModify=false; currentSlot=null; document.getElementById('slotLegend').style.display='none'; }
+  if(ex){
+    isModify=true;currentSlot=ex.orario;
+    setVal('f_nome',ex.nome);
+    if(ex.dati_extra) campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;if(c.tipo==='checkbox')el.checked=!!ex.dati_extra[c.nome];else if(ex.dati_extra[c.nome]!==undefined)el.value=ex.dati_extra[c.nome];});
+    var b=document.getElementById('modifyBanner');
+    b.innerHTML='⚠️ <strong>'+ex.cognome+' '+ex.nome+(ex.classe?' ('+ex.classe+')':'')+'</strong> è già registrato alle <strong>'+ex.orario+'</strong>.<br>Seleziona un nuovo orario per modificare la prenotazione.';
+    b.classList.add('show');
+    var sl=document.getElementById('slotLegend');if(sl)sl.style.display='flex';
+  }else{isModify=false;currentSlot=null;var sl=document.getElementById('slotLegend');if(sl)sl.style.display='none';}
   renderSlots(data.slots);
 }
 
-function renderSlots(slots) {
-  var free=slots.filter(function(s){return!s.taken;}).length; if(isModify) free--;
+function renderSlots(slots){
+  var free=slots.filter(function(s){return!s.taken;}).length;if(isModify)free--;
   var grid='<div class="slots-grid">';
   slots.forEach(function(s){
     if(s.time===currentSlot) grid+='<button class="slot-btn current-slot" onclick="selSlot(this,\''+s.time+'\')">'+s.time+'</button>';
@@ -217,93 +292,94 @@ function renderSlots(slots) {
 function selSlot(btn,time){
   document.querySelectorAll('.slot-btn').forEach(function(b){b.classList.remove('selected');});
   if(isModify&&time===currentSlot){selectedSlot=null;chk();return;}
-  btn.classList.add('selected'); btn.classList.remove('current-slot'); selectedSlot=time; chk();
+  btn.classList.add('selected');btn.classList.remove('current-slot');selectedSlot=time;chk();
 }
 
+function getVal(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function setVal(id,v){var e=document.getElementById(id);if(e)e.value=v;}
+
 function chk(){
-  var cognome=document.getElementById('f_cognome')&&document.getElementById('f_cognome').value.trim();
-  var nome=document.getElementById('f_nome')&&document.getElementById('f_nome').value.trim();
-  var hasCl=evento.classi&&evento.classi.length;
-  var classe=hasCl?document.getElementById('f_classe')&&document.getElementById('f_classe').value:'ok';
+  var cognome=getVal('f_cognome'),nome=getVal('f_nome');
+  var hasGruppi=gruppi.length>0;
+  var classe=getVal('f_classe');
+  var classeOk=!hasGruppi||classe;
+  var slotOk=!evento.slot_attivi||(slotsLoaded&&selectedSlot&&!(isModify&&selectedSlot===currentSlot));
   var extraOk=campiExtra.every(function(c){
     if(!c.obbligatorio) return true;
-    var el=document.getElementById('f_'+c.nome); if(!el) return true;
-    if(c.tipo==='checkbox') return el.checked;
-    return el.value.trim()!=='';
+    var el=document.getElementById('f_'+c.nome);if(!el)return true;
+    return c.tipo==='checkbox'?el.checked:el.value.trim()!=='';
   });
-  var ok=slotsLoaded&&cognome&&nome&&classe&&selectedSlot&&extraOk;
-  if(isModify&&selectedSlot===currentSlot) ok=false;
+  var ok=cognome&&nome&&classeOk&&slotOk&&extraOk;
   var btn=document.getElementById('submitBtn');
   if(btn){btn.disabled=!ok;btn.textContent=isModify?'Modifica prenotazione':'Conferma prenotazione';}
 }
 
 function showErrInline(msg){
-  var el=document.getElementById('msgError'); if(!el) return;
-  el.textContent=msg; el.classList.add('show');
+  var el=document.getElementById('msgError');if(!el)return;
+  el.textContent=msg;el.classList.add('show');
   el.scrollIntoView({behavior:'smooth',block:'center'});
   setTimeout(function(){el.classList.remove('show');},6000);
 }
 
-async function submit(){
+async function doSubmit(){
   var btn=document.getElementById('submitBtn');
-  var cognome=document.getElementById('f_cognome').value.trim();
-  var nome=document.getElementById('f_nome').value.trim();
-  var hasCl=evento.classi&&evento.classi.length;
-  var classe=hasCl?document.getElementById('f_classe').value:null;
+  var cognome=getVal('f_cognome'),nome=getVal('f_nome'),classe=getVal('f_classe')||null;
   var datiExtra={};
-  campiExtra.forEach(function(c){
-    var el=document.getElementById('f_'+c.nome); if(!el) return;
-    datiExtra[c.nome]=c.tipo==='checkbox'?el.checked:el.value.trim();
-  });
-  if(!cognome||!nome||(hasCl&&!classe)||!selectedSlot){showErrInline('Compila tutti i campi obbligatori e scegli un orario.');return;}
-  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Invio in corso…';
-  try {
-    if(isModify){
-      var ex=await sb('prenotazioni?evento_id=eq.'+evento.id+'&cognome=eq.'+encodeURIComponent(cognome)+'&select=id');
-      if(!ex.length) throw new Error('Prenotazione non trovata.');
-      var conf=await sb('prenotazioni?evento_id=eq.'+evento.id+'&orario=eq.'+encodeURIComponent(selectedSlot)+'&select=id');
-      if(conf.length) throw new Error('slot_taken');
-      await sb('prenotazioni?id=eq.'+ex[0].id,{method:'PATCH',body:JSON.stringify({orario:selectedSlot,dati_extra:datiExtra})});
-    } else {
-      var dup=await sb('prenotazioni?evento_id=eq.'+evento.id+'&cognome=eq.'+encodeURIComponent(cognome)+'&select=id');
-      if(dup.length){isModify=true;btn.disabled=false;btn.textContent='Modifica prenotazione';loadSlots(cognome);showErrInline('Questo cognome è già registrato. Seleziona un nuovo orario per modificare.');return;}
-      var tk=await sb('prenotazioni?evento_id=eq.'+evento.id+'&orario=eq.'+encodeURIComponent(selectedSlot)+'&select=id');
-      if(tk.length) throw new Error('slot_taken');
-      await sb('prenotazioni',{method:'POST',body:JSON.stringify({evento_id:evento.id,cognome,nome,classe,orario:selectedSlot,dati_extra:datiExtra})});
+  campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;datiExtra[c.nome]=c.tipo==='checkbox'?el.checked:el.value.trim();});
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Invio in corso…';
+  try{
+    if(evento.slot_attivi){
+      var gid=curGruppo?curGruppo.id:null;
+      if(isModify){
+        var q='prenotazioni?evento_id=eq.'+evento.id+'&cognome=eq.'+encodeURIComponent(cognome)+'&classe=eq.'+encodeURIComponent(classe||'')+'&select=id';
+        var ex=await sb(q);
+        if(!ex.length) throw new Error('Prenotazione non trovata.');
+        var conf=await sb('prenotazioni?evento_id=eq.'+evento.id+(gid?'&gruppo_id=eq.'+gid:'')+'&orario=eq.'+encodeURIComponent(selectedSlot)+'&select=id');
+        if(conf.length) throw new Error('slot_taken');
+        await sb('prenotazioni?id=eq.'+ex[0].id,{method:'PATCH',body:JSON.stringify({orario:selectedSlot,dati_extra:datiExtra})});
+      }else{
+        var dup=await sb('prenotazioni?evento_id=eq.'+evento.id+'&cognome=eq.'+encodeURIComponent(cognome)+'&classe=eq.'+encodeURIComponent(classe||'')+'&select=id');
+        if(dup.length){isModify=true;btn.disabled=false;btn.textContent='Modifica prenotazione';loadSlots(cognome,classe);showErrInline('Questo cognome è già registrato per questa classe. Seleziona un nuovo orario per modificare.');return;}
+        var tk=await sb('prenotazioni?evento_id=eq.'+evento.id+(gid?'&gruppo_id=eq.'+gid:'')+'&orario=eq.'+encodeURIComponent(selectedSlot)+'&select=id');
+        if(tk.length) throw new Error('slot_taken');
+        await sb('prenotazioni',{method:'POST',body:JSON.stringify({evento_id:evento.id,gruppo_id:gid,cognome,nome,classe,orario:selectedSlot,dati_extra:datiExtra})});
+      }
+    }else{
+      // Solo dati, niente slot
+      var dup=await sb('prenotazioni?evento_id=eq.'+evento.id+'&cognome=eq.'+encodeURIComponent(cognome)+'&classe=eq.'+encodeURIComponent(classe||'')+'&select=id');
+      if(dup.length){showErrInline('Questo cognome è già registrato per questa classe.');btn.disabled=false;btn.textContent='Conferma';return;}
+      await sb('prenotazioni',{method:'POST',body:JSON.stringify({evento_id:evento.id,gruppo_id:null,cognome,nome,classe,orario:null,dati_extra:datiExtra})});
     }
     showSuccess(cognome,nome,classe,selectedSlot,datiExtra,isModify);
-  } catch(e){
+  }catch(e){
     var msg=e.message==='slot_taken'?'Un\'altra famiglia ha confermato questo orario un attimo prima di te. Scegline un altro.':'Errore: '+e.message;
-    showErrInline(msg); btn.disabled=false; btn.textContent=isModify?'Modifica prenotazione':'Conferma prenotazione'; selectedSlot=null; loadSlots(cognome); chk();
+    showErrInline(msg);btn.disabled=false;btn.textContent=isModify?'Modifica prenotazione':'Conferma prenotazione';
+    if(evento.slot_attivi){selectedSlot=null;loadSlots(cognome,classe);chk();}
   }
 }
 
 function showSuccess(cognome,nome,classe,orario,datiExtra,wasModify){
   document.getElementById('mainForm').style.display='none';
   document.getElementById('successScreen').classList.add('show');
-  document.getElementById('succTitle').textContent=wasModify?'Prenotazione modificata':'Prenotazione confermata';
-  document.getElementById('succSub').textContent=wasModify?'Il tuo orario è stato aggiornato.':'Il tuo orario è stato registrato con successo.';
+  document.getElementById('succTitle').textContent=wasModify?'Prenotazione modificata':'Registrazione confermata';
+  document.getElementById('succSub').textContent=wasModify?'Il tuo orario è stato aggiornato.':'I tuoi dati sono stati registrati con successo.';
   var rows='<div class="summary-row"><span>Alunno</span><span>'+cognome+' '+nome+'</span></div>'+
     (classe?'<div class="summary-row"><span>Classe</span><span>'+classe+'</span></div>':'')+
-    '<div class="summary-row"><span>Orario</span><span>'+orario+'</span></div>';
-  campiExtra.forEach(function(c){
-    var v=datiExtra[c.nome]; if(v===undefined||v==='') return;
-    rows+='<div class="summary-row"><span>'+c.etichetta+'</span><span>'+(c.tipo==='checkbox'?(v?'Sì':'No'):v)+'</span></div>';
-  });
-  document.getElementById('succSummary').innerHTML=rows;
+    (orario?'<div class="summary-row"><span>Orario</span><span>'+orario+'</span></div>':'');
+  campiExtra.forEach(function(c){var v=datiExtra[c.nome];if(v===undefined||v==='')return;rows+='<div class="summary-row"><span>'+c.etichetta+'</span><span>'+(c.tipo==='checkbox'?(v?'Sì':'No'):v)+'</span></div>';});
+  document.getElementById('succSum').innerHTML=rows;
 }
 
 function resetForm(){
   document.getElementById('mainForm').style.display='block';
   document.getElementById('successScreen').classList.remove('show');
-  ['f_cognome','f_nome'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  var fc=document.getElementById('f_classe'); if(fc) fc.value='';
+  setVal('f_cognome','');setVal('f_nome','');setVal('f_classe','');
   campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;if(c.tipo==='checkbox')el.checked=false;else el.value='';});
-  document.getElementById('modifyBanner').classList.remove('show');
-  document.getElementById('slotLegend').style.display='none';
-  selectedSlot=null;currentSlot=null;isModify=false;slotsLoaded=false;
-  document.getElementById('slotsContainer').innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';
-  document.getElementById('freeCount').textContent=''; chk();
+  var mb=document.getElementById('modifyBanner');if(mb)mb.classList.remove('show');
+  var sl=document.getElementById('slotLegend');if(sl)sl.style.display='none';
+  var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML='<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">Inserisci il cognome per caricare gli orari…</div>';
+  var fc=document.getElementById('freeCount');if(fc)fc.textContent='';
+  selectedSlot=null;currentSlot=null;isModify=false;slotsLoaded=false;curGruppo=null;chk();
 }
 
 init();
