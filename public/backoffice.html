@@ -37,7 +37,10 @@ body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-se
 .uc{font-size:13px;color:var(--ink2);}
 .lob{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:13px;cursor:pointer;}
 .lob:hover{border-color:var(--danger);color:var(--danger);}
-.page{display:none;padding:28px 24px;max-width:980px;margin:0 auto;}
+.page{display:none;padding:28px 24px 110px;max-width:980px;margin:0 auto;}
+.linkbox{background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:18px;}
+.linkbox .lt{font-size:13px;color:var(--ink2);margin-bottom:8px;}
+.linkbox .lu{font-family:monospace;font-size:14px;color:var(--accent);word-break:break-all;margin-bottom:12px;}
 .page.active{display:block;}
 .st{font-family:'Syne',sans-serif;font-size:22px;font-weight:600;margin-bottom:20px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;}
@@ -155,6 +158,7 @@ tr:hover td{background:var(--surface2);}
   <!-- EVENTI -->
   <div id="pageEventi" class="page active">
     <div class="st">I tuoi eventi</div>
+    <div id="linkBox"></div>
     <div id="evList"><div class="empty">Caricamento…</div></div>
   </div>
 
@@ -452,16 +456,18 @@ async function salvaEvento(){
     gruppi:gruppi.map(function(g){return{id:g.id,nome:g.nome,classi:g.classi,orario_inizio:g.ini,orario_fine:g.fin,durata_slot:g.dur,famiglie_previste:+g.fam||null};}),
     campi:campi.map(function(c,i){return{nome:c.nome||('campo_'+Date.now().toString(36)+i),etichetta:c.etichetta,tipo:c.tipo,obbligatorio:c.obbligatorio,opzioni:c.tipo==='select'?c.opzioni.split(',').map(function(x){return x.trim();}).filter(Boolean):null};})
   };
-  if(!payload.nome||!payload.slug||!payload.data_evento){toast('Compila nome, slug e data.',false);return;}
+  if(!payload.data_evento){toast('Manca la data dell\'evento (in alto).',false);document.getElementById('eData').focus();window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!payload.nome||!payload.slug){toast('Compila nome e slug.',false);return;}
   if(!payload.slot_attivi) payload.gruppi=payload.gruppi.filter(function(g){return g.classi.length;});
   var btn=document.getElementById('saveBtn');
   var wasEdit=!!editId;
   btn.innerHTML='<span class="spi"></span>Salvo…';btn.disabled=true;
   try{
-    if(editId) await api('/eventi/'+editId,{method:'PUT',body:JSON.stringify(payload)});
-    else await api('/eventi',{method:'POST',body:JSON.stringify(payload)});
+    var res;
+    if(editId) res=await api('/eventi/'+editId,{method:'PUT',body:JSON.stringify(payload)});
+    else res=await api('/eventi',{method:'POST',body:JSON.stringify(payload)});
     toast(wasEdit?'Evento aggiornato!':'Evento creato!');
-    editId=null; showPage('eventi');
+    editId=null; showPage('eventi'); showLinkBox(res.evento);
   }catch(e){toast(e.message,false);}
   btn.textContent=editId?'Aggiorna evento':'Salva evento';btn.disabled=false;
 }
@@ -488,14 +494,14 @@ async function loadEventi(){
   try{
     var evs=(await api('/eventi')).eventi; eventiCache=evs;
     if(!evs.length){el.innerHTML='<div class="empty">Nessun evento. Creane uno!</div>';return;}
-    el.innerHTML='<div class="tw-outer"><table><thead><tr><th>Nome</th><th>Data</th><th>Tipo</th><th>Link form</th><th></th></tr></thead><tbody>'+
+    el.innerHTML='<div class="tw-outer"><table><thead><tr><th>Nome</th><th>Data</th><th>Tipo</th><th>Link per i genitori</th><th></th></tr></thead><tbody>'+
       evs.map(function(ev,i){
         var tipo=ev.slot_attivi?'<span style="color:var(--accent);font-size:13px">Con slot orari</span>':'<span style="color:var(--ink2);font-size:13px">Solo dati</span>';
         return'<tr>'+
           '<td><strong>'+escH(ev.nome)+'</strong>'+(CU.ruolo==='admin'&&ev.utente_id!==CU.username?'<div style="font-size:11px;color:var(--ink3)">di '+escH(ev.utente_id)+'</div>':'')+'</td>'+
           '<td style="white-space:nowrap">'+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT')+'</td>'+
           '<td>'+tipo+'</td>'+
-          '<td><div style="display:flex;align-items:center;gap:6px"><a href="'+escH(formUrl(ev))+'" target="_blank" style="font-size:12px;color:var(--accent);font-family:monospace;text-decoration:none">?e='+escH(ev.slug)+'</a><button class="cpb" onclick="copyL('+i+')">Copia</button></div></td>'+
+          '<td><div style="display:flex;align-items:center;gap:6px"><a href="'+escH(formUrl(ev))+'" target="_blank" style="font-size:12px;color:var(--accent);font-family:monospace;text-decoration:none">?e='+escH(ev.slug)+'</a><button class="cpb" onclick="copyL('+i+')">Copia</button><a class="cpb" style="text-decoration:none" href="'+escH(formUrl(ev))+'" target="_blank">Apri</a></div></td>'+
           '<td><div class="tda">'+
             '<button class="btn btn-sm" onclick="vediPren('+i+')">Prenotazioni</button>'+
             '<button class="btn btn-sm" onclick="editEv('+i+')">Modifica</button>'+
@@ -507,6 +513,19 @@ async function loadEventi(){
   }catch(e){el.innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+escH(e.message)+'</div>';}
 }
 
+function showLinkBox(ev){
+  var url=formUrl(ev);
+  document.getElementById('linkBox').innerHTML='<div class="linkbox">'+
+    '<div class="lt">Link da mandare ai genitori per <strong>'+escH(ev.nome)+'</strong>:</div>'+
+    '<div class="lu">'+escH(url)+'</div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-sm" onclick="copyUrl(\''+escH(url)+'\')">Copia link</button>'+
+    '<a class="btn btn-sm" style="text-decoration:none" href="'+escH(url)+'" target="_blank">Apri il form</a>'+
+    '<button class="btn btn-sm" onclick="document.getElementById(\'linkBox\').innerHTML=\'\'">Chiudi</button></div></div>';
+}
+function copyUrl(url){
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){toast('Link copiato!');},function(){prompt('Copia il link:',url);});
+  else prompt('Copia il link:',url);
+}
 function copyL(i){
   var url=formUrl(eventiCache[i]);
   if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){toast('Link copiato!');},function(){prompt('Copia il link:',url);});
