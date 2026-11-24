@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SlotBook — Backoffice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0F0F;--surface:#1A1A1A;--surface2:#222;--border:#2E2E2E;
+  --ink:#F0EDE8;--ink2:#999;--ink3:#555;
+  --accent:#C8F060;--radius:10px;--radius-lg:16px;
+  --danger:#FF5C5C;--danger-bg:#2A1515;
+  --success:#60F0A0;--success-bg:#0F2A1A;
+}
+body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:15px;min-height:100vh;}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-box{width:100%;max-width:340px;}
+.login-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.login-sub{color:var(--ink2);font-size:14px;margin-bottom:2rem;}
+.fl{margin-bottom:12px;}
+.fl label{display:block;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.fl input{width:100%;height:46px;padding:0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:15px;outline:none;}
+.fl input:focus{border-color:var(--accent);}
+.btn-acc{width:100%;height:48px;background:var(--accent);color:#0F0F0F;border:none;border-radius:var(--radius);font-family:'Syne',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;}
+.btn-acc:hover{opacity:.88;}
+.login-err{color:var(--danger);font-size:13px;margin-top:8px;display:none;}
+#app{display:none;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:50;}
+.tl{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent);}
+.tnav{display:flex;gap:2px;}
+.nb{padding:7px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .12s,color .12s;}
+.nb:hover{background:var(--surface);color:var(--ink);}
+.nb.active{background:var(--surface2);color:var(--ink);}
+.tu{display:flex;align-items:center;gap:10px;}
+.uc{font-size:13px;color:var(--ink2);}
+.lob{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:13px;cursor:pointer;}
+.lob:hover{border-color:var(--danger);color:var(--danger);}
+.page{display:none;padding:28px 24px;max-width:980px;margin:0 auto;}
+.page.active{display:block;}
+.st{font-family:'Syne',sans-serif;font-size:22px;font-weight:600;margin-bottom:20px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;}
+.ct{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:16px;}
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+/* toggle */
+.toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0;}
+.toggle-label{font-size:14px;color:var(--ink);}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:99px;cursor:pointer;transition:background .2s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--ink3);border-radius:50%;transition:transform .2s,background .2s;}
+.toggle input:checked+.toggle-slider{background:var(--accent);border-color:var(--accent);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:#0F0F0F;}
+/* tags */
+.tw{display:flex;flex-wrap:wrap;gap:6px;padding:7px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;min-height:42px;align-items:center;cursor:text;}
+.tw:focus-within{border-color:var(--accent);}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;background:var(--surface);border:1px solid var(--border);border-radius:99px;font-size:13px;}
+.tag-x{cursor:pointer;color:var(--ink3);}
+.tag-x:hover{color:var(--danger);}
+.ti{border:none;background:transparent;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;min-width:80px;flex:1;}
+/* buttons */
+.btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .12s;}
+.btn:hover{background:var(--surface2);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-p{background:var(--accent);color:#0F0F0F;border-color:transparent;font-weight:500;}
+.btn-p:hover{opacity:.88;background:var(--accent);}
+.btn-d{color:var(--danger);}
+.btn-d:hover{background:var(--danger-bg);border-color:var(--danger-bg);}
+.btn-sm{padding:5px 11px;font-size:13px;}
+.brow{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+/* tables */
+.tw-outer{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;min-width:500px;}
+th{text-align:left;font-size:11px;font-weight:500;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface);white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{color:var(--ink);}
+th.sorted .si{color:var(--accent);opacity:1;}
+.si{margin-left:4px;opacity:.4;font-size:11px;}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface2);}
+.tda{display:flex;gap:6px;white-space:nowrap;}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;}
+.ba{background:#1A1A2E;color:#8888FF;border:1px solid #333366;}
+.bu{background:var(--surface2);color:var(--ink2);border:1px solid var(--border);}
+/* slot preview */
+.sp{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.sc{padding:3px 9px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--ink2);}
+/* gruppi */
+.gruppo-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;}
+.gruppo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.gruppo-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--accent);}
+.add-gruppo{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.add-gruppo:hover{border-color:var(--accent);color:var(--accent);}
+/* campi builder */
+.cl{display:flex;flex-direction:column;gap:8px;}
+.crow{display:grid;grid-template-columns:1fr 110px 90px auto;gap:8px;align-items:start;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+.crow input,.crow select{padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;width:100%;}
+.crow input:focus,.crow select:focus{border-color:var(--accent);}
+.crow-opt{grid-column:1/-1;}
+.add-campo{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--ink2);font-family:'Instrument Sans',sans-serif;font-size:14px;cursor:pointer;width:100%;margin-top:4px;}
+.add-campo:hover{border-color:var(--accent);color:var(--accent);}
+/* stats */
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.sc2{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+.sv{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--accent);}
+.sl{font-size:12px;color:var(--ink2);margin-top:4px;}
+/* copy btn */
+.cpb{flex-shrink:0;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:12px;cursor:pointer;}
+.cpb:hover{background:var(--surface);}
+/* toast */
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;font-size:14px;z-index:999;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.tok{background:var(--success-bg);color:var(--success);border:1px solid #1A4A2A;}
+.terr{background:var(--danger-bg);color:var(--danger);border:1px solid #4A1A1A;}
+.empty{text-align:center;padding:3rem;color:var(--ink3);font-size:14px;}
+.spi{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+@media(max-width:700px){.r2,.r3,.r4{grid-template-columns:1fr;}.crow{grid-template-columns:1fr 1fr;}.page{padding:16px;}.tnav .nb span{display:none;}}
+</style>
+</head>
+<body>
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">SlotBook</div>
+    <div class="login-sub" id="lsub">Gestione prenotazioni — Backoffice</div>
+    <div class="fl"><label>Username</label><input type="text" id="lu" placeholder="admin" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="fl"><label>Password</label><input type="password" id="lp" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn-acc" id="lbtn" onclick="doLogin()">Accedi</button>
+    <div class="login-err" id="lerr">Credenziali errate.</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="tl">SlotBook</div>
+    <div class="tnav">
+      <button class="nb active" id="navEventi" onclick="showPage('eventi')"><span>🗓 </span>Eventi</button>
+      <button class="nb" id="navNuovo" onclick="editId=null;showPage('nuovo')"><span>+ </span>Nuovo</button>
+      <button class="nb" id="navPrenotazioni" onclick="showPage('prenotazioni')"><span>📋 </span>Prenotazioni</button>
+      <button class="nb" id="navUtenti" onclick="showPage('utenti')" style="display:none"><span>👤 </span>Utenti</button>
+    </div>
+    <div class="tu"><button class="nb" id="uc" onclick="showPage('account')" title="Il mio account"></button><button class="lob" onclick="doLogout()">Esci</button></div>
+  </div>
+
+  <!-- EVENTI -->
+  <div id="pageEventi" class="page active">
+    <div class="st">I tuoi eventi</div>
+    <div id="evList"><div class="empty">Caricamento…</div></div>
+  </div>
+
+  <!-- NUOVO/MODIFICA -->
+  <div id="pageNuovo" class="page">
+    <div class="st" id="ftitle">Nuovo evento</div>
+
+    <div class="card">
+      <div class="ct">Informazioni generali</div>
+      <div class="r2">
+        <div class="field"><label>Nome evento *</label><input type="text" id="eNome" placeholder="Colloqui — Aprile 2026" maxlength="150" oninput="autoSlug()"/></div>
+        <div class="field"><label>Slug (link corto) *</label><input type="text" id="eSlug" placeholder="colloqui-apr26" maxlength="80"/><div style="font-size:11px;color:var(--ink3);margin-top:3px">Solo lettere minuscole, numeri, trattini</div></div>
+      </div>
+      <div class="field" style="max-width:220px"><label>Data *</label><input type="date" id="eData"/></div>
+      <div class="divider"></div>
+      <div class="toggle-row">
+        <label class="toggle"><input type="checkbox" id="eSlotAttivi" checked onchange="document.getElementById('gruppiSection').style.display=this.checked?'':'none'"/><span class="toggle-slider"></span></label>
+        <span class="toggle-label">Prenotazione oraria attiva</span>
+        <span style="font-size:12px;color:var(--ink3);margin-left:4px">(disattiva per raccogliere solo dati senza slot)</span>
+      </div>
+    </div>
+
+    <div id="gruppiSection" class="card">
+      <div class="ct">Gruppi classe e orari</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:14px">Ogni gruppo ha le sue classi e i suoi orari. Classi dello stesso gruppo condividono gli stessi slot. Per aggiungere una classe con orari propri usa "Aggiungi gruppo"; per farla condividere gli orari di un gruppo, scrivila tra le classi di quel gruppo. Se indichi le famiglie previste, la durata dello slot si calcola da sola.</div>
+      <div id="gruppiList"></div>
+      <button class="add-gruppo" onclick="addGruppo()">+ Aggiungi gruppo (altre classi)</button>
+    </div>
+
+    <div class="card">
+      <div class="ct">Campi personalizzati</div>
+      <div style="font-size:13px;color:var(--ink2);margin-bottom:14px">Oltre a Cognome, Nome e Classe (sempre inclusi), puoi aggiungere altri campi.</div>
+      <div class="cl" id="campiList"></div>
+      <button class="add-campo" onclick="addCampo()">+ Aggiungi campo</button>
+    </div>
+
+    <div class="brow">
+      <button class="btn" onclick="showPage('eventi')">Annulla</button>
+      <button class="btn btn-p" id="saveBtn" onclick="salvaEvento()">Salva evento</button>
+    </div>
+  </div>
+
+  <!-- PRENOTAZIONI -->
+  <div id="pagePrenotazioni" class="page">
+    <div class="st">Prenotazioni</div>
+    <div class="card" style="padding:16px">
+      <div class="field" style="margin:0"><label>Seleziona evento</label>
+        <select id="pSel" onchange="loadPren()"><option value="">— scegli —</option></select>
+      </div>
+    </div>
+    <div id="statsRow" style="display:none" class="srow">
+      <div class="sc2"><div class="sv" id="stTot">0</div><div class="sl">Slot totali</div></div>
+      <div class="sc2"><div class="sv" id="stPren">0</div><div class="sl">Prenotati</div></div>
+      <div class="sc2"><div class="sv" id="stLib">0</div><div class="sl">Liberi</div></div>
+    </div>
+    <div style="display:none;justify-content:flex-end;gap:8px;margin-bottom:10px" id="expBar">
+      <button class="btn btn-sm" onclick="loadPren()">↻ Aggiorna</button>
+      <button class="btn btn-sm" onclick="exportXL()">⬇ Esporta Excel</button>
+    </div>
+    <div id="prenList"><div class="empty">Seleziona un evento.</div></div>
+  </div>
+
+  <!-- UTENTI -->
+  <div id="pageUtenti" class="page">
+    <div class="st">Gestione utenti</div>
+    <div class="card">
+      <div class="ct">Aggiungi utente</div>
+      <div class="r3">
+        <div class="field"><label>Username *</label><input type="text" id="nUser" placeholder="mario.rossi" autocomplete="off"/></div>
+        <div class="field"><label>Password * (min. 8 caratteri)</label><input type="password" id="nPass" autocomplete="new-password"/></div>
+        <div class="field"><label>Ruolo</label><select id="nRuolo"><option value="user">Utente</option><option value="admin">Admin</option></select></div>
+      </div>
+      <div class="brow"><button class="btn btn-p" onclick="addUser()">Aggiungi</button></div>
+    </div>
+    <div class="tw-outer" id="userList"><div class="empty">Caricamento…</div></div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div id="pageAccount" class="page">
+    <div class="st">Il mio account</div>
+    <div class="card" style="max-width:460px">
+      <div class="ct">Cambia password</div>
+      <div class="field"><label>Password attuale</label><input type="password" id="pwOld" autocomplete="current-password"/></div>
+      <div class="field"><label>Nuova password (min. 8 caratteri)</label><input type="password" id="pwNew" autocomplete="new-password"/></div>
+      <div class="field"><label>Ripeti nuova password</label><input type="password" id="pwNew2" autocomplete="new-password"/></div>
+      <div class="brow"><button class="btn btn-p" onclick="changePw()">Aggiorna password</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+var API='/api';
+// Configurazione proposta per i nuovi eventi (modificabile dal form)
+var TEMPLATE_NUOVO={
+  nome:'Colloqui 3A e 3B',
+  gruppi:[
+    {nome:'3A',classi:['3A'],orario_inizio:'16:20',orario_fine:'17:50',famiglie_previste:15},
+    {nome:'3B',classi:['3B'],orario_inizio:'17:50',orario_fine:'19:20',famiglie_previste:17}
+  ]
+};
+var CU=null, TOKEN=null, needsSetup=false, editId=null, gruppi=[], campi=[], gCnt=0, cCnt=0, sortCol='orario', sortDir=1, curEv=null, curPren=[], eventiCache=[];
+
+function escH(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+async function api(path,opts){
+  opts=opts||{};
+  var h={'Content-Type':'application/json'};
+  if(TOKEN) h['Authorization']='Bearer '+TOKEN;
+  var r=await fetch(API+path,Object.assign({},opts,{headers:h}));
+  var d=null; try{d=await r.json();}catch(e){}
+  if(r.status===401&&TOKEN){doLogout(true);throw new Error((d&&d.error)||'Sessione scaduta.');}
+  if(!r.ok||!d||d.ok===false) throw new Error((d&&d.error)||('Errore '+r.status));
+  return d;
+}
+
+// ── LOGIN / SETUP ────────────────────────────────────────────
+async function boot(){
+  var t=sessionStorage.getItem('sbTok');
+  if(t){
+    TOKEN=t;
+    try{var me=await api('/auth/me');CU=me.user;startApp();return;}catch(e){TOKEN=null;sessionStorage.removeItem('sbTok');}
+  }
+  try{
+    var st=await api('/auth/status');
+    if(st.needsSetup){
+      needsSetup=true;
+      document.getElementById('lsub').textContent='Primo avvio: crea l\'account amministratore (password di almeno 8 caratteri).';
+      document.getElementById('lbtn').textContent='Crea account admin';
+      document.getElementById('lp').setAttribute('autocomplete','new-password');
+    }
+  }catch(e){}
+}
+async function doLogin(){
+  var u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
+  var err=document.getElementById('lerr');
+  err.style.display='none';
+  if(!u||!p) return;
+  try{
+    var d=await api(needsSetup?'/auth/setup':'/auth/login',{method:'POST',body:JSON.stringify({username:u,password:p})});
+    TOKEN=d.token; CU=d.user; sessionStorage.setItem('sbTok',TOKEN); needsSetup=false; startApp();
+  }catch(e){err.textContent=e.message;err.style.display='block';}
+}
+function doLogout(silent){sessionStorage.removeItem('sbTok');TOKEN=null;if(!silent)location.reload();else setTimeout(function(){location.reload();},1200);}
+function startApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('uc').textContent=CU.username+(CU.ruolo==='admin'?' (admin)':'');
+  if(CU.ruolo==='admin') document.getElementById('navUtenti').style.display='';
+  loadEventi();
+}
+
+function showPage(p){
+  var P=p.charAt(0).toUpperCase()+p.slice(1);
+  document.querySelectorAll('.page').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tnav .nb').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('page'+P).classList.add('active');
+  var n=document.getElementById('nav'+P); if(n) n.classList.add('active');
+  if(p==='eventi') loadEventi();
+  if(p==='prenotazioni') initPren();
+  if(p==='utenti') loadUsers();
+  if(p==='nuovo'&&!editId) resetForm();
+}
+
+function toast(m,ok){
+  var t=document.getElementById('toast');
+  t.textContent=m; t.className='toast show '+(ok===false?'terr':'tok');
+  clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove('show');},3500);
+}
+
+function autoSlug(){
+  if(editId) return;
+  var v=document.getElementById('eNome').value;
+  document.getElementById('eSlug').value=v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,80);
+}
+
+function genSlots(ini,fin,dur){
+  var toMin=function(t){var p=String(t||'').split(':');return +p[0]*60+ +p[1];};
+  var out=[]; if(!(dur>0)) return out;
+  for(var t=toMin(ini);t<toMin(fin)&&out.length<300;t+=dur){var h=Math.floor(t/60),m=t%60;out.push((h<10?'0':'')+h+':'+(m<10?'0':'')+m);}
+  return out;
+}
+
+// ── GRUPPI ───────────────────────────────────────────────────
+function addGruppo(d){
+  d=d||{nome:'',classi:[],orario_inizio:'16:00',orario_fine:'19:00',durata_slot:10};
+  var g={uid:++gCnt,id:d.id||null,nome:d.nome||'',classi:(d.classi||[]).slice(),ini:d.orario_inizio||'16:00',fin:d.orario_fine||'19:00',dur:d.durata_slot||10,fam:d.famiglie_previste||''};
+  if(!d.durata_slot&&g.fam) g.dur=durataDaFamiglie(g);
+  gruppi.push(g);
+  renderGruppi();
+  if(!d.id&&!(d.classi||[]).length){var n=document.getElementById('gti'+g.uid);if(n)n.focus();}
+}
+function findG(uid){return gruppi.find(function(x){return x.uid===uid;});}
+function removeGruppo(uid){
+  var g=findG(uid);
+  if(g&&g.id&&!confirm('Rimuovere il gruppo? Le prenotazioni già fatte per queste classi resteranno in elenco ma non saranno più modificabili dal form.')) return;
+  gruppi=gruppi.filter(function(x){return x.uid!==uid;});renderGruppi();
+}
+function minutiFinestra(g){var t=function(x){var p=String(x||'').split(':');return +p[0]*60+ +p[1];};return t(g.fin)-t(g.ini);}
+function durataDaFamiglie(g){var n=+g.fam,m=minutiFinestra(g);return n>0&&m>0?Math.max(1,Math.floor(m/n)):g.dur;}
+function updateGruppo(uid,k,v){
+  var g=findG(uid); if(!g) return;
+  g[k]=v;
+  // con le famiglie previste impostate, la durata si ricalcola quando cambiano famiglie o orari
+  if((k==='fam'||k==='ini'||k==='fin')&&+g.fam>0){
+    g.dur=durataDaFamiglie(g);
+    var di=document.getElementById('gdur'+uid); if(di) di.value=g.dur;
+  }
+  if(k!=='nome') renderGruppoPreview(uid);
+}
+
+function renderGruppi(){
+  var el=document.getElementById('gruppiList');
+  if(!gruppi.length){el.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:8px">Nessun gruppo. Aggiungine almeno uno.</div>';return;}
+  el.innerHTML=gruppi.map(function(g,idx){
+    var tagsHtml=g.classi.map(function(c,i){return'<span class="tag">'+escH(c)+'<span class="tag-x" onclick="removeGTag('+g.uid+','+i+')">×</span></span>';}).join('');
+    return'<div class="gruppo-card">'+
+      '<div class="gruppo-header"><span class="gruppo-title">Gruppo '+(idx+1)+'</span>'+
+      '<button class="btn btn-sm btn-d" onclick="removeGruppo('+g.uid+')">Rimuovi</button></div>'+
+      '<div class="r2" style="margin-bottom:10px">'+
+        '<div class="field" style="margin:0"><label>Nome gruppo</label><input type="text" value="'+escH(g.nome)+'" placeholder="es. 2A e 2B" oninput="updateGruppo('+g.uid+',\'nome\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Classi (Invio per aggiungere)</label>'+
+          '<div class="tw" onclick="document.getElementById(\'gti'+g.uid+'\').focus()">'+
+            tagsHtml+'<input class="ti" id="gti'+g.uid+'" placeholder="es. 2A…" onkeydown="handleGTag(event,'+g.uid+')" onblur="commitGTag('+g.uid+')"/>'+
+          '</div></div>'+
+      '</div>'+
+      '<div class="r4">'+
+        '<div class="field" style="margin:0"><label>Inizio</label><input type="time" value="'+g.ini+'" oninput="updateGruppo('+g.uid+',\'ini\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Fine</label><input type="time" value="'+g.fin+'" oninput="updateGruppo('+g.uid+',\'fin\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Famiglie previste</label><input type="number" value="'+escH(g.fam)+'" min="1" max="500" placeholder="facoltativo" oninput="updateGruppo('+g.uid+',\'fam\',this.value)"/></div>'+
+        '<div class="field" style="margin:0"><label>Durata slot (min)</label><input type="number" id="gdur'+g.uid+'" value="'+g.dur+'" min="1" max="240" oninput="updateGruppo('+g.uid+',\'dur\',+this.value)"/></div>'+
+      '</div>'+
+      '<div id="gsp'+g.uid+'" style="margin-top:8px"></div>'+
+    '</div>';
+  }).join('');
+  gruppi.forEach(function(g){renderGruppoPreview(g.uid);});
+}
+function renderGruppoPreview(uid){
+  var g=findG(uid); if(!g) return;
+  var el=document.getElementById('gsp'+uid); if(!el) return;
+  var s=genSlots(g.ini,g.fin,g.dur||0);
+  var fam=+g.fam, avviso='';
+  if(fam>0&&s.length<fam) avviso=' — <span style="color:var(--danger)">attenzione: meno slot delle famiglie previste ('+fam+')</span>';
+  else if(fam>0) avviso=' per '+fam+' famiglie previste'+(s.length>fam?' ('+(s.length-fam)+' di scorta)':'');
+  el.innerHTML='<div style="font-size:11px;color:var(--ink2);margin-bottom:4px">'+s.length+' slot da '+(g.dur||0)+' min'+avviso+'</div>'+
+    '<div class="sp">'+s.map(function(x){return'<span class="sc">'+x+'</span>';}).join('')+'</div>';
+}
+function commitGTag(uid){
+  var inp=document.getElementById('gti'+uid); if(!inp) return;
+  var v=inp.value.trim().toUpperCase().replace(/,/g,'');
+  var g=findG(uid);
+  if(v&&g&&g.classi.indexOf(v)<0){g.classi.push(v);renderGruppi();}
+  else inp.value='';
+}
+function handleGTag(e,uid){
+  if(e.key==='Enter'||e.key===','){e.preventDefault();commitGTag(uid);var n=document.getElementById('gti'+uid);if(n)n.focus();}
+  if(e.key==='Backspace'&&!e.target.value){var g=findG(uid);if(g&&g.classi.length){g.classi.pop();renderGruppi();var n=document.getElementById('gti'+uid);if(n)n.focus();}}
+}
+function removeGTag(uid,i){var g=findG(uid);if(g){g.classi.splice(i,1);renderGruppi();}}
+
+// ── CAMPI ────────────────────────────────────────────────────
+function addCampo(d){
+  d=d||{etichetta:'',tipo:'testo',obbligatorio:false,opzioni:[]};
+  campi.push({uid:++cCnt,nome:d.nome||null,etichetta:d.etichetta||'',tipo:d.tipo||'testo',obbligatorio:!!d.obbligatorio,opzioni:(d.opzioni||[]).join(', ')});
+  renderCampi();
+}
+function findC(uid){return campi.find(function(x){return x.uid===uid;});}
+function removeCampo(uid){campi=campi.filter(function(c){return c.uid!==uid;});renderCampi();}
+function updateCampo(uid,k,v){var c=findC(uid);if(c){c[k]=v;if(k==='tipo')renderCampi();}}
+function renderCampi(){
+  var el=document.getElementById('campiList');
+  if(!campi.length){el.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:8px">Nessun campo aggiuntivo.</div>';return;}
+  var tipi=['testo','numero','email','telefono','data','select','checkbox'];
+  el.innerHTML=campi.map(function(c){
+    return'<div class="crow">'+
+      '<input type="text" value="'+escH(c.etichetta)+'" placeholder="Etichetta" oninput="updateCampo('+c.uid+',\'etichetta\',this.value)"/>'+
+      '<select onchange="updateCampo('+c.uid+',\'tipo\',this.value)">'+tipi.map(function(t){return'<option'+(c.tipo===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select>'+
+      '<select onchange="updateCampo('+c.uid+',\'obbligatorio\',this.value===\'true\')"><option value="false"'+(c.obbligatorio?'':' selected')+'>Opzionale</option><option value="true"'+(c.obbligatorio?' selected':'')+'>Obbligatorio</option></select>'+
+      '<button class="btn btn-sm btn-d" onclick="removeCampo('+c.uid+')">✕</button>'+
+      (c.tipo==='select'?'<div class="crow-opt"><input type="text" value="'+escH(c.opzioni)+'" placeholder="Opzioni separate da virgola" oninput="updateCampo('+c.uid+',\'opzioni\',this.value)"/></div>':'')+
+    '</div>';
+  }).join('');
+}
+
+// ── SALVA EVENTO ─────────────────────────────────────────────
+async function salvaEvento(){
+  // eventuale classe digitata ma non ancora confermata con Invio
+  gruppi.forEach(function(g){var i=document.getElementById('gti'+g.uid);if(i&&i.value.trim()){var v=i.value.trim().toUpperCase();if(g.classi.indexOf(v)<0)g.classi.push(v);}});
+  var payload={
+    nome:document.getElementById('eNome').value.trim(),
+    slug:document.getElementById('eSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,''),
+    data_evento:document.getElementById('eData').value,
+    slot_attivi:document.getElementById('eSlotAttivi').checked,
+    gruppi:gruppi.map(function(g){return{id:g.id,nome:g.nome,classi:g.classi,orario_inizio:g.ini,orario_fine:g.fin,durata_slot:g.dur,famiglie_previste:+g.fam||null};}),
+    campi:campi.map(function(c,i){return{nome:c.nome||('campo_'+Date.now().toString(36)+i),etichetta:c.etichetta,tipo:c.tipo,obbligatorio:c.obbligatorio,opzioni:c.tipo==='select'?c.opzioni.split(',').map(function(x){return x.trim();}).filter(Boolean):null};})
+  };
+  if(!payload.nome||!payload.slug||!payload.data_evento){toast('Compila nome, slug e data.',false);return;}
+  if(!payload.slot_attivi) payload.gruppi=payload.gruppi.filter(function(g){return g.classi.length;});
+  var btn=document.getElementById('saveBtn');
+  var wasEdit=!!editId;
+  btn.innerHTML='<span class="spi"></span>Salvo…';btn.disabled=true;
+  try{
+    if(editId) await api('/eventi/'+editId,{method:'PUT',body:JSON.stringify(payload)});
+    else await api('/eventi',{method:'POST',body:JSON.stringify(payload)});
+    toast(wasEdit?'Evento aggiornato!':'Evento creato!');
+    editId=null; showPage('eventi');
+  }catch(e){toast(e.message,false);}
+  btn.textContent=editId?'Aggiorna evento':'Salva evento';btn.disabled=false;
+}
+
+function resetForm(){
+  editId=null;gruppi=[];campi=[];gCnt=0;cCnt=0;
+  document.getElementById('eNome').value='';
+  document.getElementById('eSlug').value='';
+  document.getElementById('eData').value='';
+  document.getElementById('eSlotAttivi').checked=true;
+  document.getElementById('gruppiSection').style.display='';
+  document.getElementById('ftitle').textContent='Nuovo evento';
+  document.getElementById('saveBtn').textContent='Salva evento';
+  document.getElementById('eNome').value=TEMPLATE_NUOVO.nome; autoSlug();
+  TEMPLATE_NUOVO.gruppi.forEach(function(g){addGruppo(g);});
+  renderGruppi();renderCampi();
+}
+
+// ── LISTA EVENTI ─────────────────────────────────────────────
+function formUrl(ev){return location.origin+'/form.html?e='+encodeURIComponent(ev.slug);}
+async function loadEventi(){
+  var el=document.getElementById('evList');
+  el.innerHTML='<div class="empty">Caricamento…</div>';
+  try{
+    var evs=(await api('/eventi')).eventi; eventiCache=evs;
+    if(!evs.length){el.innerHTML='<div class="empty">Nessun evento. Creane uno!</div>';return;}
+    el.innerHTML='<div class="tw-outer"><table><thead><tr><th>Nome</th><th>Data</th><th>Tipo</th><th>Link form</th><th></th></tr></thead><tbody>'+
+      evs.map(function(ev,i){
+        var tipo=ev.slot_attivi?'<span style="color:var(--accent);font-size:13px">Con slot orari</span>':'<span style="color:var(--ink2);font-size:13px">Solo dati</span>';
+        return'<tr>'+
+          '<td><strong>'+escH(ev.nome)+'</strong>'+(CU.ruolo==='admin'&&ev.utente_id!==CU.username?'<div style="font-size:11px;color:var(--ink3)">di '+escH(ev.utente_id)+'</div>':'')+'</td>'+
+          '<td style="white-space:nowrap">'+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT')+'</td>'+
+          '<td>'+tipo+'</td>'+
+          '<td><div style="display:flex;align-items:center;gap:6px"><a href="'+escH(formUrl(ev))+'" target="_blank" style="font-size:12px;color:var(--accent);font-family:monospace;text-decoration:none">?e='+escH(ev.slug)+'</a><button class="cpb" onclick="copyL('+i+')">Copia</button></div></td>'+
+          '<td><div class="tda">'+
+            '<button class="btn btn-sm" onclick="vediPren('+i+')">Prenotazioni</button>'+
+            '<button class="btn btn-sm" onclick="editEv('+i+')">Modifica</button>'+
+            '<button class="btn btn-sm" onclick="dupEv('+i+')">Duplica</button>'+
+            '<button class="btn btn-sm btn-d" onclick="delEv('+i+')">Elimina</button>'+
+          '</div></td>'+
+        '</tr>';
+      }).join('')+'</tbody></table></div>';
+  }catch(e){el.innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+escH(e.message)+'</div>';}
+}
+
+function copyL(i){
+  var url=formUrl(eventiCache[i]);
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){toast('Link copiato!');},function(){prompt('Copia il link:',url);});
+  else prompt('Copia il link:',url);
+}
+
+function editEv(i){
+  var ev=eventiCache[i];
+  editId=ev.id;
+  document.getElementById('eNome').value=ev.nome;
+  document.getElementById('eSlug').value=ev.slug;
+  document.getElementById('eData').value=ev.data_evento;
+  document.getElementById('eSlotAttivi').checked=ev.slot_attivi;
+  document.getElementById('gruppiSection').style.display=ev.slot_attivi?'':'none';
+  gruppi=[];gCnt=0;campi=[];cCnt=0;
+  ev.gruppi.forEach(function(g){addGruppo(g);});
+  ev.campi.forEach(function(c){addCampo(c);});
+  renderGruppi();renderCampi();
+  document.getElementById('ftitle').textContent='Modifica evento';
+  document.getElementById('saveBtn').textContent='Aggiorna evento';
+  showPage('nuovo');
+}
+
+function dupEv(i){
+  var ev=eventiCache[i];
+  resetForm(); gruppi=[]; campi=[]; gCnt=0; cCnt=0;
+  document.getElementById('eNome').value=ev.nome+' (copia)';
+  document.getElementById('eSlug').value=ev.slug+'-copia';
+  document.getElementById('eSlotAttivi').checked=ev.slot_attivi;
+  document.getElementById('gruppiSection').style.display=ev.slot_attivi?'':'none';
+  ev.gruppi.forEach(function(g){var c=Object.assign({},g);delete c.id;addGruppo(c);});
+  ev.campi.forEach(function(c){addCampo(c);});
+  renderGruppi();renderCampi();
+  document.getElementById('ftitle').textContent='Nuovo evento (copia di '+ev.nome+')';
+  editId=null;
+  document.querySelectorAll('.page').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('pageNuovo').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+async function delEv(i){
+  var ev=eventiCache[i];
+  if(!confirm('Eliminare "'+ev.nome+'" e tutte le sue prenotazioni? L\'operazione non si può annullare.')) return;
+  try{await api('/eventi/'+ev.id,{method:'DELETE'});toast('Evento eliminato.');loadEventi();}
+  catch(e){toast(e.message,false);}
+}
+
+function vediPren(i){showPage('prenotazioni');pendingEv=eventiCache[i].id;}
+var pendingEv=null;
+
+// ── PRENOTAZIONI ─────────────────────────────────────────────
+async function initPren(){
+  var sel=document.getElementById('pSel');
+  var keep=pendingEv||sel.value;
+  sel.innerHTML='<option value="">— scegli —</option>';
+  try{
+    var evs=(await api('/eventi')).eventi; eventiCache=evs;
+    evs.forEach(function(ev){
+      var o=document.createElement('option');
+      o.value=ev.id;o.textContent=ev.nome+' — '+new Date(ev.data_evento+'T12:00:00').toLocaleDateString('it-IT');
+      sel.appendChild(o);
+    });
+    if(keep&&evs.some(function(e){return e.id===keep;})){sel.value=keep;loadPren();}
+  }catch(e){toast(e.message,false);}
+  pendingEv=null;
+}
+
+async function loadPren(){
+  var sel=document.getElementById('pSel');
+  if(!sel.value){document.getElementById('prenList').innerHTML='<div class="empty">Seleziona un evento.</div>';document.getElementById('statsRow').style.display='none';document.getElementById('expBar').style.display='none';return;}
+  curEv=eventiCache.find(function(e){return e.id===sel.value;});
+  document.getElementById('prenList').innerHTML='<div class="empty">Caricamento…</div>';
+  try{
+    var pr=(await api('/eventi/'+curEv.id+'/prenotazioni')).prenotazioni;
+    curPren=pr;
+    var totSlot=0;
+    curEv.gruppi.forEach(function(g){totSlot+=genSlots(g.orario_inizio,g.orario_fine,g.durata_slot).length;});
+    document.getElementById('stTot').textContent=curEv.slot_attivi?totSlot:'—';
+    document.getElementById('stPren').textContent=pr.length;
+    document.getElementById('stLib').textContent=curEv.slot_attivi?Math.max(0,totSlot-pr.length):'—';
+    document.getElementById('statsRow').style.display='grid';
+    document.getElementById('expBar').style.display='flex';
+    if(!pr.length){document.getElementById('prenList').innerHTML='<div class="empty">Nessuna prenotazione ancora.</div>';return;}
+    renderPrenTable();
+  }catch(e){document.getElementById('prenList').innerHTML='<div class="empty" style="color:var(--danger)">Errore: '+escH(e.message)+'</div>';}
+}
+
+function renderPrenTable(){
+  var cs=curEv.campi;
+  var val=function(p,k){return k==='created_at'?new Date(p.created_at).getTime():String(p[k]||'').toLowerCase();};
+  var sorted=curPren.slice().sort(function(a,b){var va=val(a,sortCol),vb=val(b,sortCol);return va<vb?-sortDir:va>vb?sortDir:0;});
+  var cols=['orario','classe','cognome','nome'];
+  if(!curEv.slot_attivi) cols.shift();
+  cs.forEach(function(c){cols.push('x:'+c.nome);});
+  cols.push('created_at');
+  var labels={'orario':'Orario','classe':'Classe','cognome':'Cognome','nome':'Nome','created_at':'Registrato il'};
+  cs.forEach(function(c){labels['x:'+c.nome]=c.etichetta;});
+  var thead=cols.map(function(c){
+    var sortable=c.indexOf('x:')!==0, is=sortCol===c;
+    return'<th'+(sortable?' onclick="setSort(\''+c+'\')"':'')+' class="'+(is?'sorted':'')+'">'+escH(labels[c])+(sortable?'<span class="si">'+(is?(sortDir>0?'↑':'↓'):'↕')+'</span>':'')+'</th>';
+  }).join('')+'<th></th>';
+  var tbody=sorted.map(function(p){
+    var tds=cols.map(function(c){
+      if(c==='created_at') return'<td style="font-size:12px;color:var(--ink2)">'+new Date(p.created_at).toLocaleString('it-IT')+'</td>';
+      if(c.indexOf('x:')===0){var k=c.slice(2),v=p.dati_extra?p.dati_extra[k]:undefined;if(typeof v==='boolean')v=v?'Sì':'No';return'<td>'+(v!==undefined&&v!==''?escH(v):'—')+'</td>';}
+      return'<td>'+escH(p[c]||'')+'</td>';
+    }).join('');
+    return'<tr>'+tds+'<td><button class="btn btn-sm btn-d" onclick="delPren(\''+escH(p.id)+'\')">Elimina</button></td></tr>';
+  }).join('');
+  document.getElementById('prenList').innerHTML='<div class="tw-outer"><table><thead><tr>'+thead+'</tr></thead><tbody>'+tbody+'</tbody></table></div>';
+}
+
+function setSort(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  if(curPren.length) renderPrenTable();
+}
+
+async function delPren(id){
+  var p=curPren.find(function(x){return x.id===id;});
+  if(!confirm('Eliminare la prenotazione di '+(p?p.cognome+' '+p.nome:'')+'? Lo slot tornerà libero.')) return;
+  try{await api('/eventi/'+curEv.id+'/prenotazioni/'+encodeURIComponent(id),{method:'DELETE'});toast('Eliminata.');loadPren();}
+  catch(e){toast(e.message,false);}
+}
+
+function exportXL(){
+  if(!curPren.length){toast('Nessuna prenotazione.',false);return;}
+  var cs=curEv.campi;
+  var hdrs=curEv.slot_attivi?['Orario','Classe','Cognome','Nome']:['Classe','Cognome','Nome'];
+  cs.forEach(function(c){hdrs.push(c.etichetta);});
+  hdrs.push('Registrato il');
+  var rows=[hdrs];
+  curPren.slice().sort(function(a,b){return String(a.orario||'').localeCompare(String(b.orario||''))||String(a.cognome).localeCompare(String(b.cognome));}).forEach(function(p){
+    var row=curEv.slot_attivi?[p.orario,p.classe,p.cognome,p.nome]:[p.classe,p.cognome,p.nome];
+    cs.forEach(function(c){var v=p.dati_extra?p.dati_extra[c.nome]:'';if(typeof v==='boolean')v=v?'Sì':'No';row.push(v==null?'':v);});
+    row.push(new Date(p.created_at).toLocaleString('it-IT'));
+    rows.push(row);
+  });
+  var wb=XLSX.utils.book_new();
+  var ws=XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols']=hdrs.map(function(){return{wch:16};});
+  XLSX.utils.book_append_sheet(wb,ws,'Prenotazioni');
+  XLSX.writeFile(wb,curEv.nome.replace(/[^\w\-]+/g,'_')+'.xlsx');
+}
+
+// ── UTENTI ───────────────────────────────────────────────────
+async function loadUsers(){
+  var el=document.getElementById('userList');
+  try{
+    var us=(await api('/utenti')).utenti;
+    el.innerHTML='<table><thead><tr><th>Username</th><th>Ruolo</th><th>Creato il</th><th></th></tr></thead><tbody>'+
+      us.map(function(u){
+        return'<tr><td><strong>'+escH(u.username)+'</strong></td>'+
+          '<td><span class="badge '+(u.ruolo==='admin'?'ba':'bu')+'">'+escH(u.ruolo)+'</span></td>'+
+          '<td style="font-size:12px;color:var(--ink2)">'+new Date(u.created_at).toLocaleDateString('it-IT')+'</td>'+
+          '<td>'+(u.username!==CU.username?'<button class="btn btn-sm btn-d" onclick="delUser(\''+escH(u.username)+'\')">Elimina</button>':'')+'</td></tr>';
+      }).join('')+'</tbody></table>';
+  }catch(e){el.innerHTML='<div class="empty" style="color:var(--danger)">'+escH(e.message)+'</div>';}
+}
+async function addUser(){
+  var u=document.getElementById('nUser').value.trim(),p=document.getElementById('nPass').value,r=document.getElementById('nRuolo').value;
+  if(!u||!p){toast('Compila username e password.',false);return;}
+  try{
+    await api('/utenti',{method:'POST',body:JSON.stringify({username:u,password:p,ruolo:r})});
+    toast('Utente aggiunto!');document.getElementById('nUser').value='';document.getElementById('nPass').value='';loadUsers();
+  }catch(e){toast(e.message,false);}
+}
+async function delUser(username){
+  if(!confirm('Eliminare l\'utente '+username+' e tutti i suoi eventi e prenotazioni?')) return;
+  try{await api('/utenti/'+encodeURIComponent(username),{method:'DELETE'});toast('Utente eliminato.');loadUsers();}
+  catch(e){toast(e.message,false);}
+}
+
+// ── ACCOUNT ──────────────────────────────────────────────────
+async function changePw(){
+  var a=document.getElementById('pwOld').value,n=document.getElementById('pwNew').value,n2=document.getElementById('pwNew2').value;
+  if(n!==n2){toast('Le due password nuove non coincidono.',false);return;}
+  try{
+    await api('/auth/password',{method:'POST',body:JSON.stringify({attuale:a,nuova:n})});
+    toast('Password aggiornata.');['pwOld','pwNew','pwNew2'].forEach(function(id){document.getElementById(id).value='';});
+  }catch(e){toast(e.message,false);}
+}
+
+boot();
+</script>
+</body>
+</html>
