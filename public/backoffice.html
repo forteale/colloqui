@@ -481,8 +481,11 @@ function resetForm(){
   document.getElementById('gruppiSection').style.display='';
   document.getElementById('ftitle').textContent='Nuovo evento';
   document.getElementById('saveBtn').textContent='Salva evento';
-  document.getElementById('eNome').value=TEMPLATE_NUOVO.nome; autoSlug();
-  TEMPLATE_NUOVO.gruppi.forEach(function(g){addGruppo(g);});
+  // la proposta 3A/3B vale solo per gli admin; gli altri utenti partono da un modulo vuoto
+  if(CU&&CU.ruolo==='admin'){
+    document.getElementById('eNome').value=TEMPLATE_NUOVO.nome; autoSlug();
+    TEMPLATE_NUOVO.gruppi.forEach(function(g){addGruppo(g);});
+  }
   renderGruppi();renderCampi();
 }
 
