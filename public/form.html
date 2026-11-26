@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Prenotazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F7F4EE;--card:#FFFEFB;--ink:#1C1A17;--ink2:#6B6560;--ink3:#A09A93;--accent:#2D5016;--accent-light:#EAF0E2;--border:#E2DDD6;--danger:#8B2E2E;--danger-light:#F5EAEA;--warn:#7A5200;--warn-light:#FFF8E6;--warn-border:#F0D890;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;padding:2rem 1rem 0;min-height:100vh;display:flex;flex-direction:column;}
+.container{max-width:520px;margin:0 auto;width:100%;flex:1;}
+header{margin-bottom:2rem;}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
+h1{font-family:'Fraunces',serif;font-weight:300;font-size:32px;line-height:1.2;}
+h1 em{font-style:italic;color:var(--accent);}
+.header-line{width:40px;height:2px;background:var(--accent);margin-top:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;}
+.section-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;}
+.field{margin-bottom:1rem;}
+.field:last-child{margin-bottom:0;}
+label{display:block;font-size:13px;font-weight:500;color:var(--ink2);margin-bottom:6px;}
+label .req{color:var(--danger);margin-left:2px;}
+input[type=text],input[type=number],input[type=email],input[type=tel],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .15s;appearance:none;-webkit-appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+.sw{position:relative;}
+.sw::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--ink3);pointer-events:none;}
+.checkbox-field{display:flex;align-items:center;gap:10px;padding:10px 0;}
+.checkbox-field input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;}
+.checkbox-field label{margin:0;font-size:15px;color:var(--ink);cursor:pointer;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+.modify-banner{display:none;background:var(--warn-light);border:1px solid var(--warn-border);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--warn);line-height:1.5;margin-bottom:1.25rem;}
+.modify-banner.show{display:block;}
+.modify-banner strong{font-weight:500;}
+.slots-intro{font-size:13px;color:var(--ink2);margin-bottom:1rem;line-height:1.5;}
+.slots-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.slot-btn{height:48px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;transition:background .12s,border-color .12s,color .12s;}
+.slot-btn:active:not(:disabled){background:var(--accent-light);border-color:var(--accent);color:var(--accent);}
+.slot-btn.selected{background:var(--accent);border-color:var(--accent);color:#fff;}
+.slot-btn.current-slot{border:2px solid var(--accent);color:var(--accent);background:var(--accent-light);}
+.slot-btn:disabled{background:#EDEBE6;border-color:#E2DDD6;color:#C0B9B0;cursor:not-allowed;text-decoration:line-through;opacity:.7;}
+.slots-loading{text-align:center;padding:1.5rem;color:var(--ink3);font-size:14px;}
+.free-count{font-size:12px;color:var(--ink3);margin-top:10px;}
+.slot-legend{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--ink3);flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-dot{width:12px;height:12px;border-radius:3px;}
+.submit-btn{width:100%;height:54px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;margin-top:.5rem;-webkit-tap-highlight-color:transparent;}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed;}
+.msg{border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.5;margin-bottom:1rem;display:none;}
+.msg.show{display:block;}
+.msg-error{background:var(--danger-light);color:var(--danger);border:1px solid #E8C5C5;}
+.success-screen{text-align:center;padding:2rem 1rem;display:none;}
+.success-screen.show{display:block;}
+.success-icon{width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;}
+.success-icon svg{width:28px;height:28px;}
+.success-screen h2{font-family:'Fraunces',serif;font-weight:300;font-size:24px;margin-bottom:8px;}
+.success-screen p{color:var(--ink2);font-size:14px;line-height:1.6;}
+.booking-summary{margin-top:1.25rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;text-align:left;}
+.summary-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px solid var(--border);}
+.summary-row:last-child{border-bottom:none;}
+.summary-row span:first-child{color:var(--ink2);}
+.summary-row span:last-child{font-weight:500;}
+.new-booking-btn{margin-top:1.25rem;padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;}
+.error-page{text-align:center;padding:4rem 1rem;}
+.error-page h2{font-family:'Fraunces',serif;font-weight:300;font-size:28px;margin-bottom:8px;}
+.error-page p{color:var(--ink2);}
+/* footer */
+footer{max-width:520px;margin:2rem auto 0;padding:1.5rem 1rem;border-top:1px solid var(--border);text-align:center;}
+footer p{font-size:12px;color:var(--ink3);line-height:1.7;}
+footer a{color:var(--ink2);text-decoration:none;}
+footer a:hover{color:var(--accent);}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@media(max-width:600px){
+  body{padding:1.25rem .875rem 0;}h1{font-size:24px;}.card{padding:1.25rem 1rem;}
+  .r2{grid-template-columns:1fr;gap:0;margin-bottom:0;}.r2 .field{margin-bottom:1rem;}
+  .slots-grid{grid-template-columns:repeat(4,1fr);gap:6px;}.slot-btn{height:46px;font-size:13px;}
+}
+@media(max-width:380px){.slots-grid{grid-template-columns:repeat(3,1fr);gap:5px;}.slot-btn{height:44px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="container" id="root">
+  <div class="slots-loading" style="padding:4rem;text-align:center">Caricamento…</div>
+</div>
+<footer>
+  <p>Realizzato da <strong>Forte Alessandro</strong> · <a href="mailto:forteale84@gmail.com">forteale84@gmail.com</a><br>
+  I dati inseriti saranno utilizzati esclusivamente per la finalità della presente registrazione.</p>
+</footer>
+
+<script>
+var API='/api';
+var evento=null, gruppi=[], campiExtra=[], curGruppo=null, slug=null;
+var selectedSlot=null, currentSlot=null, isModify=false, slotsLoaded=false, debounceTimer=null, loadSeq=0;
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+async function api(path,opts){
+  var r=await fetch(API+path,Object.assign({headers:{'Content-Type':'application/json'}},opts||{}));
+  var d=null; try{d=await r.json();}catch(e){}
+  if(!r.ok||!d||d.ok===false) throw new Error((d&&d.error)||('Errore '+r.status));
+  return d;
+}
+
+function annoScolastico(d){var dt=new Date(d+'T12:00:00'),y=dt.getFullYear();return dt.getMonth()>=8?y+'/'+String(y+1).slice(2):(y-1)+'/'+String(y).slice(2);}
+
+async function init(){
+  slug=new URLSearchParams(location.search).get('e');
+  if(!slug){showErr('Link non valido.');return;}
+  try{
+    var d=await api('/public/evento?slug='+encodeURIComponent(slug));
+    evento=d.evento; gruppi=evento.gruppi||[]; campiExtra=evento.campi||[];
+    document.title=evento.nome;
+    render();
+  }catch(e){showErr(e.message);}
+}
+
+function showErr(msg){
+  document.getElementById('root').innerHTML='<div class="error-page"><h2>Oops</h2><p>'+esc(msg)+'</p></div>';
+}
+
+function hint(msg){return'<div style="color:var(--ink3);font-size:14px;text-align:center;padding:1rem">'+msg+'</div>';}
+
+function render(){
+  var dataFmt=new Date(evento.data_evento+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  var tutteClassi=[];
+  gruppi.forEach(function(g){g.classi.forEach(function(c){if(tutteClassi.indexOf(c)<0)tutteClassi.push(c);});});
+  var classeHtml=tutteClassi.length
+    ?'<div class="field"><label for="f_classe">Classe <span class="req">*</span></label><div class="sw"><select id="f_classe" onchange="onClasseChange()"><option value="">— Seleziona —</option>'+tutteClassi.map(function(c){return'<option>'+esc(c)+'</option>';}).join('')+'</select></div></div>'
+    :'';
+  var extraHtml=campiExtra.map(renderCampo).join('');
+  var slotSection=evento.slot_attivi
+    ?'<div class="card">'+
+        '<div class="section-label">Scegli l\'orario</div>'+
+        '<p class="slots-intro" id="slotIntro">Seleziona un orario disponibile. Gli orari barrati sono già occupati.</p>'+
+        '<div id="slotsContainer" class="slots-loading">'+(tutteClassi.length?'Seleziona la classe e inserisci il cognome per vedere gli orari…':'Inserisci il cognome per caricare gli orari…')+'</div>'+
+        '<div class="free-count" id="freeCount"></div>'+
+        '<div class="slot-legend" id="slotLegend" style="display:none">'+
+          '<div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><span>Selezionato</span></div>'+
+          '<div class="legend-item"><div class="legend-dot" style="background:var(--accent-light);border:2px solid var(--accent)"></div><span>Tuo orario attuale</span></div>'+
+          '<div class="legend-item"><div class="legend-dot" style="background:#EDEBE6"></div><span>Occupato</span></div>'+
+        '</div>'+
+      '</div>'
+    :'';
+  document.getElementById('root').innerHTML=
+    '<header><div class="eyebrow">Prenotazione · a.s. '+annoScolastico(evento.data_evento)+'</div>'+
+    '<h1><em>'+esc(evento.nome)+'</em></h1>'+
+    '<div style="font-size:13px;color:var(--ink2);margin-top:6px">'+esc(dataFmt)+'</div>'+
+    '<div class="header-line"></div></header>'+
+    '<div id="mainForm">'+
+      '<div id="msgError" class="msg msg-error"></div>'+
+      '<div id="modifyBanner" class="modify-banner"></div>'+
+      '<div class="card">'+
+        '<div class="section-label">Dati</div>'+
+        '<div class="r2">'+
+          '<div class="field"><label for="f_cognome">Cognome alunno <span class="req">*</span></label><input type="text" id="f_cognome" placeholder="Rossi" autocomplete="off" maxlength="80" oninput="onCognomeInput()"/></div>'+
+          '<div class="field"><label for="f_nome">Nome alunno <span class="req">*</span></label><input type="text" id="f_nome" placeholder="Luca" autocomplete="off" maxlength="80" oninput="chk()"/></div>'+
+        '</div>'+classeHtml+extraHtml+
+      '</div>'+
+      slotSection+
+      '<button class="submit-btn" id="submitBtn" disabled onclick="doSubmit()">Conferma</button>'+
+    '</div>'+
+    '<div id="successScreen" class="success-screen">'+
+      '<div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>'+
+      '<h2 id="succTitle">Registrazione confermata</h2><p id="succSub">I tuoi dati sono stati registrati con successo.</p>'+
+      '<div class="booking-summary" id="succSum"></div>'+
+      '<button class="new-booking-btn" onclick="resetForm()">Registra un altro alunno</button>'+
+    '</div>';
+  chk();
+}
+
+function renderCampo(c){
+  var id='f_'+c.nome, req=c.obbligatorio?' <span class="req">*</span>':'';
+  if(c.tipo==='checkbox') return'<div class="checkbox-field"><input type="checkbox" id="'+id+'" onchange="chk()"/><label for="'+id+'">'+esc(c.etichetta)+req+'</label></div>';
+  var lbl='<label for="'+id+'">'+esc(c.etichetta)+req+'</label>';
+  if(c.tipo==='select') return'<div class="field">'+lbl+'<div class="sw"><select id="'+id+'" onchange="chk()"><option value="">— Seleziona —</option>'+(c.opzioni||[]).map(function(o){return'<option>'+esc(o)+'</option>';}).join('')+'</select></div></div>';
+  var t={numero:'number',email:'email',telefono:'tel',data:'date'}[c.tipo]||'text';
+  return'<div class="field">'+lbl+'<input type="'+t+'" id="'+id+'" maxlength="500" oninput="chk()"/></div>';
+}
+
+function onClasseChange(){
+  selectedSlot=null; currentSlot=null; isModify=false; slotsLoaded=false;
+  resetSlotUI();
+  var classe=getVal('f_classe');
+  curGruppo=null;
+  gruppi.forEach(function(g){if(g.classi.indexOf(classe)>=0) curGruppo=g;});
+  var si=document.getElementById('slotIntro');
+  if(si&&curGruppo) si.textContent='Seleziona un orario disponibile. Ogni colloquio dura '+curGruppo.durata_slot+' minuti. Gli orari barrati sono già occupati.';
+  triggerLoad();
+  chk();
+}
+
+function onCognomeInput(){
+  clearTimeout(debounceTimer);
+  selectedSlot=null; currentSlot=null; isModify=false; slotsLoaded=false;
+  resetSlotUI(); chk();
+  debounceTimer=setTimeout(triggerLoad,500);
+}
+
+function triggerLoad(){
+  if(!evento.slot_attivi) return;
+  var cognome=getVal('f_cognome'), classe=getVal('f_classe');
+  var sc=document.getElementById('slotsContainer');
+  if(gruppi.length&&!classe){if(sc)sc.innerHTML=hint('Seleziona prima la classe…');return;}
+  if(cognome.length<2){if(sc)sc.innerHTML=hint('Inserisci il cognome per caricare gli orari…');return;}
+  loadSlots(cognome,classe);
+}
+
+function resetSlotUI(){
+  var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML=hint('Caricamento…');
+  var fc=document.getElementById('freeCount');if(fc)fc.textContent='';
+  var mb=document.getElementById('modifyBanner');if(mb)mb.classList.remove('show');
+  var sl=document.getElementById('slotLegend');if(sl)sl.style.display='none';
+}
+
+async function loadSlots(cognome,classe){
+  var seq=++loadSeq;
+  try{
+    var d=await api('/public/slots?slug='+encodeURIComponent(slug)+'&classe='+encodeURIComponent(classe||'')+'&cognome='+encodeURIComponent(cognome||''));
+    if(seq!==loadSeq) return; // risposta vecchia: l'utente ha già cambiato cognome/classe
+    onSlotsLoaded(d);
+  }catch(e){if(seq===loadSeq){var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML=hint(esc(e.message));}}
+}
+
+function onSlotsLoaded(data){
+  slotsLoaded=true;
+  var ex=data.existing;
+  var sl=document.getElementById('slotLegend');
+  if(ex){
+    isModify=true; currentSlot=ex.orario;
+    setVal('f_nome',ex.nome);
+    if(ex.dati_extra) campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;if(c.tipo==='checkbox')el.checked=!!ex.dati_extra[c.nome];else if(ex.dati_extra[c.nome]!==undefined)el.value=ex.dati_extra[c.nome];});
+    var b=document.getElementById('modifyBanner');
+    b.innerHTML='⚠️ <strong>'+esc(ex.cognome+' '+ex.nome)+(ex.classe?' ('+esc(ex.classe)+')':'')+'</strong> è già prenotato alle <strong>'+esc(ex.orario)+'</strong>.<br>Seleziona un nuovo orario per modificare la prenotazione.';
+    b.classList.add('show');
+    if(sl) sl.style.display='flex';
+  }else{
+    isModify=false; currentSlot=null;
+    if(sl) sl.style.display='none';
+  }
+  renderSlots(data.slots);
+  chk();
+}
+
+function renderSlots(slots){
+  var free=slots.filter(function(s){return!s.taken;}).length;
+  var grid='<div class="slots-grid">';
+  slots.forEach(function(s){
+    if(s.time===currentSlot) grid+='<button type="button" class="slot-btn current-slot" onclick="selSlot(this,\''+s.time+'\')">'+s.time+'</button>';
+    else if(s.taken) grid+='<button type="button" class="slot-btn" disabled>'+s.time+'</button>';
+    else grid+='<button type="button" class="slot-btn" onclick="selSlot(this,\''+s.time+'\')">'+s.time+'</button>';
+  });
+  grid+='</div>';
+  document.getElementById('slotsContainer').innerHTML=grid;
+  document.getElementById('freeCount').textContent=free?(free+' orari disponibili su '+slots.length):'Nessun orario disponibile: tutti gli slot sono stati prenotati.';
+}
+
+function selSlot(btn,time){
+  document.querySelectorAll('.slot-btn').forEach(function(b){b.classList.remove('selected');});
+  if(isModify&&time===currentSlot){selectedSlot=null;chk();return;}
+  btn.classList.add('selected');selectedSlot=time;chk();
+}
+
+function getVal(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function setVal(id,v){var e=document.getElementById(id);if(e)e.value=v;}
+
+function chk(){
+  var btn=document.getElementById('submitBtn'); if(!btn) return;
+  var cognome=getVal('f_cognome'),nome=getVal('f_nome');
+  var classeOk=!gruppi.length||getVal('f_classe');
+  var slotOk=!evento.slot_attivi||(slotsLoaded&&selectedSlot&&!(isModify&&selectedSlot===currentSlot));
+  var extraOk=campiExtra.every(function(c){
+    if(!c.obbligatorio) return true;
+    var el=document.getElementById('f_'+c.nome);if(!el)return true;
+    return c.tipo==='checkbox'?el.checked:el.value.trim()!=='';
+  });
+  btn.disabled=!(cognome&&nome&&classeOk&&slotOk&&extraOk);
+  btn.textContent=isModify?'Modifica prenotazione':'Conferma prenotazione';
+}
+
+function showErrInline(msg){
+  var el=document.getElementById('msgError');if(!el)return;
+  el.textContent=msg;el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(function(){el.classList.remove('show');},7000);
+}
+
+async function doSubmit(){
+  var btn=document.getElementById('submitBtn');
+  var cognome=getVal('f_cognome'),nome=getVal('f_nome'),classe=getVal('f_classe')||null;
+  var datiExtra={};
+  campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;datiExtra[c.nome]=c.tipo==='checkbox'?el.checked:el.value.trim();});
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Invio in corso…';
+  try{
+    var r=await api('/public/prenota',{method:'POST',body:JSON.stringify({slug:slug,cognome:cognome,nome:nome,classe:classe,orario:selectedSlot,dati_extra:datiExtra})});
+    showSuccess(r.prenotazione,r.modified);
+  }catch(e){
+    var msg=e.message==='slot_taken'?'Un\'altra famiglia ha confermato questo orario un attimo prima di te. Scegline un altro.':e.message;
+    showErrInline(msg);
+    chk();
+    if(evento.slot_attivi){selectedSlot=null;triggerLoad();}
+  }
+}
+
+function showSuccess(p,wasModify){
+  document.getElementById('mainForm').style.display='none';
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('succTitle').textContent=wasModify?'Prenotazione modificata':'Registrazione confermata';
+  document.getElementById('succSub').textContent=wasModify?'Il tuo orario è stato aggiornato.':'I tuoi dati sono stati registrati con successo.';
+  var row=function(k,v){return'<div class="summary-row"><span>'+esc(k)+'</span><span>'+esc(v)+'</span></div>';};
+  var rows=row('Alunno',p.cognome+' '+p.nome)+(p.classe?row('Classe',p.classe):'')+(p.orario?row('Orario',p.orario):'');
+  campiExtra.forEach(function(c){var v=p.dati_extra&&p.dati_extra[c.nome];if(v===undefined||v==='')return;rows+=row(c.etichetta,c.tipo==='checkbox'?(v?'Sì':'No'):v);});
+  document.getElementById('succSum').innerHTML=rows;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetForm(){
+  document.getElementById('mainForm').style.display='block';
+  document.getElementById('successScreen').classList.remove('show');
+  setVal('f_cognome','');setVal('f_nome','');setVal('f_classe','');
+  campiExtra.forEach(function(c){var el=document.getElementById('f_'+c.nome);if(!el)return;if(c.tipo==='checkbox')el.checked=false;else el.value='';});
+  resetSlotUI();
+  var sc=document.getElementById('slotsContainer');if(sc)sc.innerHTML=hint(gruppi.length?'Seleziona la classe e inserisci il cognome per vedere gli orari…':'Inserisci il cognome per caricare gli orari…');
+  selectedSlot=null;currentSlot=null;isModify=false;slotsLoaded=false;curGruppo=null;chk();
+}
+
+init();
+</script>
+</body>
+</html>
